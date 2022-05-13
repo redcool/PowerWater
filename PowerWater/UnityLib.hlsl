@@ -192,13 +192,7 @@ float3 TransformObjectToWorldNormal(float3 normal){
 float3 TransformViewToProjection(float3 viewPos){
     return mul((float3x3)UNITY_MATRIX_P,viewPos);
 }
-float3 GetWorldSpaceViewDir(float3 worldPos){
-    return _WorldSpaceCameraPos - worldPos;
-}
 
-float3 GetWorldSpaceLightDir(float3 worldPos){
-    return _MainLightPosition.xyz;// - worldPos;
-}
 
 
 
@@ -290,16 +284,6 @@ SAMPLER(samplerunity_ShadowMask);
 TEXTURECUBE(unity_SpecCube0);SAMPLER(samplerunity_SpecCube0);
 TEXTURECUBE(unity_SpecCube1);SAMPLER(samplerunity_SpecCube1);
 TEXTURECUBE(_GlossyEnvironmentCubeMap);SAMPLER(sampler_GlossyEnvironmentCubeMap);
-
-float3 DecodeHDREnvironment(float4 encodedIrradiance, float4 decodeInstructions)
-{
-    // Take into account texture alpha if decodeInstructions.w is true(the alpha value affects the RGB channels)
-    float alpha = max(decodeInstructions.w * (encodedIrradiance.a - 1.0) + 1.0, 0.0);
-
-    // If Linear mode is not supported we can skip exponent part
-    return (decodeInstructions.x * pow(alpha, decodeInstructions.y)) * encodedIrradiance.rgb;
-}
-
 
 
 //==============================
