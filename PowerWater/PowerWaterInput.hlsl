@@ -14,8 +14,9 @@
     half _NormalSpeed,_NormalTiling;
     half4 _Color2,_Color1;
 
+    half _ApplyGerstnerWaveOn;
     half2 _WaveTiling;
-    half3 _WaveDir;
+    half4 _WaveDir;
     half _WaveScale,_WaveSpeed,_WaveStrength;
 
     half4 _FoamTex_ST;

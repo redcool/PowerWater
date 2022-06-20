@@ -237,7 +237,7 @@ void Unity_SimpleNoise_half(half2 UV, half Scale, out half Out)
 half Unity_SimpleNoise_half(half2 uv,half scale){
 	half x = 0;
 	Unity_SimpleNoise_half(uv,scale,x);
-	return x;
+	return (x-0.5);
 }
 
 void Unity_Dither_half4(half4 In, half4 ScreenPosition, out half4 Out)

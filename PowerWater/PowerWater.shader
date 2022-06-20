@@ -16,8 +16,9 @@ Shader "URP/PowerWater"
         _NormalTiling("_NormalTiling",float) = 1
 
         [Header(Wave)]
-        _WaveTiling("_WaveTiling",vector) = (0.1,1,0,0)
+        [Enum(Value,0, GerstnerWave, 1)]_ApplyGerstnerWaveOn("_ApplyGerstnerWaveOn",int) = 0
         _WaveDir("_WaveDir",vector) = (-1,0,0,0)
+        _WaveTiling("_WaveTiling",vector) = (0.1,1,0,0)
         _WaveScale("_WaveScale",float) = 1
         _WaveSpeed("_WaveSpeed",float) = 1
         _WaveStrength("_WaveStrength",float) = 1

@@ -14,6 +14,7 @@
 
     #include "PowerWaterInput.hlsl"
     #include "PowerWaterCore.hlsl"
+    #include "PowerLib/WaveLib.hlsl"
 
     struct appdata
     {
@@ -40,15 +41,26 @@
         half3 worldPos = TransformObjectToWorld(v.vertex.xyz);
         half2 noiseUV = CalcOffsetTiling(worldPos.xz * _WaveTiling.xy,_WaveDir,_WaveSpeed,1);
         half simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale);
+        // simpleNoise = smoothstep(-0.5,0.5,simpleNoise);
 
+
+        half3 tangent = v.tangent.xyz;//normalize(half3(1,simpleNoise,0));
+        half3 normal = v.normal; //half3(-tangent.y,tangent.x,0);
+
+        // apply wave
         v.vertex.y = simpleNoise * _WaveStrength;
+        if(_ApplyGerstnerWaveOn){
+            v.vertex.xyz += GerstnerWave(_WaveDir,worldPos,tangent,normal);
+        }
+
         o.vertex = TransformObjectToHClip(v.vertex);
 
         o.uvNoise.xy = v.uv;
         o.uvNoise.z = simpleNoise;
 
-        half3 n = normalize(TransformObjectToWorldNormal(v.normal));
-        half3 t = normalize(TransformObjectToWorldDir(v.tangent.xyz));
+
+        half3 t = normalize(TransformObjectToWorldDir(tangent.xyz));
+        half3 n = normalize(TransformObjectToWorldNormal(normal));
         half3 b = normalize(cross(n,t)) * v.tangent.w;
 
         o.tSpace0 = half4(t.x,b.x,n.x,worldPos.x);
@@ -88,7 +100,6 @@
         half nv = saturate(dot(n,v));
         half nh = saturate(dot(n,h));
         half lh = saturate(dot(l,h));
-
 // calc sea color
         half3 seaColor = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV);
 // return seaColor.xyzx;
@@ -101,6 +112,8 @@
         half roughness = 1 - smoothness;
         half a = max(roughness * roughness, HALF_MIN_SQRT);
         half a2 = max(a * a ,HALF_MIN);
+//         half d = nh*nh * (a2-1)+1;
+// return a2/(d*d);
 
         half metallic = _Metallic * pbrMask.x;
         half occlusion = lerp(1, pbrMask.z,_Occlusion);
