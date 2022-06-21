@@ -40,7 +40,7 @@
 // simple noise
         half3 worldPos = TransformObjectToWorld(v.vertex.xyz);
         half2 noiseUV = CalcOffsetTiling(worldPos.xz * _WaveTiling.xy,_WaveDir,_WaveSpeed,1);
-        half simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale)  * _WaveStrength;
+        half simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale) ;
         // simpleNoise = smoothstep(-0.5,0.5,simpleNoise);
 
 
@@ -48,7 +48,7 @@
         half3 normal = v.normal; //half3(-tangent.y,tangent.x,0);
 
         // apply wave
-        v.vertex.y = simpleNoise;
+        v.vertex.y = simpleNoise * _WaveStrength;
         if(_ApplyGerstnerWaveOn){
             v.vertex.xyz += GerstnerWave(_WaveDir,worldPos,tangent,normal);
             simpleNoise = v.vertex.y;
@@ -79,7 +79,7 @@
         half2 mainUV = i.uvNoise.xy;
         half simpleNoise = i.uvNoise.z;
         half clampNoise = clamp(simpleNoise,0.3,1);
-
+// return clampNoise;
         half2 screenUV =  i.vertex.xy /_ScreenParams.xy;
 
         half3 worldPos = half3(i.tSpace0.w,i.tSpace1.w,i.tSpace2.w);
