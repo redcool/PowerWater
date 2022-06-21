@@ -18,6 +18,7 @@
     half2 _WaveTiling;
     half4 _WaveDir;
     half _WaveScale,_WaveSpeed,_WaveStrength;
+    half _WaveCrestMax,_WaveCrestMin;
 
     half4 _FoamTex_ST;
     half _FoamDepthMin,_FoamDepthMax,_FoamSpeed;

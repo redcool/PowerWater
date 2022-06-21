@@ -18,12 +18,12 @@ float LinearizeDepth(float z)
 screenUV -> ndc -> clip -> view
 unity_MatrixInvVP
 */
-half3 ScreenToWorldPos(half2 uv,half rawDepth,float4x4 invVP){
+float3 ScreenToWorldPos(float2 uv,float rawDepth,float4x4 invVP){
     // #if defined(UNITY_UV_STARTS_AT_TOP)
         uv.y = 1-uv.y;
     // #endif
 
-    half4 p = half4(uv*2-1,rawDepth,1);
+    float4 p = float4(uv*2-1,rawDepth,1);
 
     p = mul(invVP,p);
     return p.xyz/p.w;
@@ -36,7 +36,7 @@ half3 ScreenToWorldPos(half2 uv,half rawDepth,float4x4 invVP){
 
 #define GetWorldSpaceViewDir(worldPos) (_WorldSpaceCameraPos - worldPos)
 #define GetWorldSpaceLightDir(worldPos) _MainLightPosition.xyz
-#define BlendNormal(n1,n2) normalize(half3(n1.xy*n2.z+n2.xy*n1.z,n1.z+n2.z))
+#define BlendNormal(n1,n2) normalize(float3(n1.xy*n2.z+n2.xy*n1.z,n1.z+n2.z))
 #define PerceptualRoughnessToMipmapLevel(roughness) roughness * (1.7 - roughness * 0.7) * 6
 
 #endif //POWER_UTILS_HLSL

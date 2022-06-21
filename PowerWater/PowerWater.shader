@@ -16,12 +16,15 @@ Shader "URP/PowerWater"
         _NormalTiling("_NormalTiling",float) = 1
 
         [Header(Wave)]
-        [Enum(Value,0, GerstnerWave, 1)]_ApplyGerstnerWaveOn("_ApplyGerstnerWaveOn",int) = 0
-        _WaveDir("_WaveDir",vector) = (-1,0,0,0)
+        [Enum(None,0, ApplyGerstnerWave, 1)]_ApplyGerstnerWaveOn("_ApplyGerstnerWaveOn",int) = 0
+        _WaveDir("_WaveDir(xy:dir)(z: steep,w:waveLength)",vector) = (-1,0,0,0)
         _WaveTiling("_WaveTiling",vector) = (0.1,1,0,0)
         _WaveScale("_WaveScale",float) = 1
         _WaveSpeed("_WaveSpeed",float) = 1
         _WaveStrength("_WaveStrength",float) = 1
+        [Header(Wave Crest)]
+        _WaveCrestMin("_WaveCrestMin",range(0,1)) = 0.3
+        _WaveCrestMax("_WaveCrestMax",range(0,1)) = 0.5
 
         [Header(PBR Mask)]
         _PBRMask("_PBRMask(Metallic:R,Smoothness:G,Occlusion:B)",2d)="white"{}

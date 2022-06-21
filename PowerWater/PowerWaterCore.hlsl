@@ -1,8 +1,8 @@
 #if !defined(POWER_WATER_CORE_HLSL)
 #define POWER_WATER_CORE_HLSL
     half2 CalcOffsetTiling(half2 posXZ,half2 dir,half speed,half tiling){
-        half2 uv = posXZ + dir * speed *_Time.x;
-        return uv * tiling;
+        half2 uv = posXZ* tiling + dir * speed *_Time.x;
+        return uv ;
     }
     half3 CalcWorldPos(half2 screenUV){
         half depth = tex2D(_CameraDepthTexture,screenUV);

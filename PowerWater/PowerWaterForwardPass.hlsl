@@ -40,7 +40,7 @@
 // simple noise
         half3 worldPos = TransformObjectToWorld(v.vertex.xyz);
         half2 noiseUV = CalcOffsetTiling(worldPos.xz * _WaveTiling.xy,_WaveDir,_WaveSpeed,1);
-        half simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale);
+        half simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale)  * _WaveStrength;
         // simpleNoise = smoothstep(-0.5,0.5,simpleNoise);
 
 
@@ -48,9 +48,10 @@
         half3 normal = v.normal; //half3(-tangent.y,tangent.x,0);
 
         // apply wave
-        v.vertex.y = simpleNoise * _WaveStrength;
+        v.vertex.y = simpleNoise;
         if(_ApplyGerstnerWaveOn){
             v.vertex.xyz += GerstnerWave(_WaveDir,worldPos,tangent,normal);
+            simpleNoise = v.vertex.y;
         }
 
         o.vertex = TransformObjectToHClip(v.vertex);
@@ -88,7 +89,6 @@
 
         // half2 noiseUV = CalcOffsetTiling(worldPos.xz * _WaveTiling.xy,_WaveDir,_WaveSpeed,1);
         // half simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale);
-        // return simpleNoise;
 // blend 2 normals 
         half3 n = Blend2Normals(worldPos,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
 
@@ -101,7 +101,10 @@
         half nh = saturate(dot(n,h));
         half lh = saturate(dot(l,h));
 // calc sea color
+        half waveCreast = smoothstep(_WaveCrestMin,_WaveCrestMax,simpleNoise);
+        
         half3 seaColor = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV);
+        seaColor += waveCreast;
 // return seaColor.xyzx;
         half3 emissionColor = 0;
 //-------- pbr
