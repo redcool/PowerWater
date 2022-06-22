@@ -38,7 +38,7 @@ Shader "URP/PowerWater"
         _ShallowColor("_ShallowColor",color) = (1,1,1,1)
 
         [Header(Refraction)]
-        _RefractionIntensity("_RefractionIntensity",float) = 1
+        _RefractionIntensity("_RefractionIntensity",range(0,1)) = 0.5
 
         [Header(Foam)]
         _FoamTex("_FoamTex",2d) = ""{}
@@ -47,7 +47,7 @@ Shader "URP/PowerWater"
         _FoamSpeed("_FoamSpeed",float) = 1
 
         [Header(Caustics)]
-        _CausticsIntensity("_CausticsIntensity",range(0,1)) = 1
+        _CausticsIntensity("_CausticsIntensity",range(0,3)) = 1
         _CausticsSpeed("_CausticsSpeed",float) = 1
         _CausticsTiling("_CausticsTiling",float) = 1
     }

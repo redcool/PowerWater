@@ -38,29 +38,33 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CausticsIntensity: 0.28
-    - _CausticsSpeed: 1.69
-    - _CausticsTiling: 16.77
-    - _Depth: -1.01
-    - _FoamDepthMax: 0.89
-    - _FoamDepthMin: 0.19
-    - _FoamSpeed: 3.2
+    - _ApplyGerstnerWaveOn: 0
+    - _CausticsIntensity: 1
+    - _CausticsSpeed: 1
+    - _CausticsTiling: 2
+    - _Depth: -1.73
+    - _FoamDepthMax: 1
+    - _FoamDepthMin: 0.44
+    - _FoamSpeed: 1
     - _Metallic: 0
-    - _NormalScale: 0.39
-    - _NormalSpeed: 3.3
-    - _NormalTiling: 0.43
+    - _NormalScale: 1
+    - _NormalSpeed: 1
+    - _NormalTiling: 0.1
     - _Occlusion: 0
-    - _RefractionIntensity: 5.84
-    - _Smoothness: 1
+    - _RefractionIntensity: 0.18
+    - _Smoothness: 0.85
+    - _WaveCrestMax: 1
+    - _WaveCrestMin: 0.51
     - _WaveScale: 1
-    - _WaveSpeed: 50.3
-    - _WaveStrength: 0.1
+    - _WaveSpeed: 1
+    - _WaveStrength: 0
     - _WaveTiling: 1
+    - _WaveType: 1
     m_Colors:
     - _Color1: {r: 0, g: 0.44459778, b: 0.9150943, a: 1}
     - _Color2: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
     - _DepthColor: {r: 0, g: 0.68669534, b: 0.754717, a: 1}
     - _ShallowColor: {r: 0.022309173, g: 0.8867924, b: 0.044057164, a: 1}
-    - _WaveDir: {r: 1, g: 0, b: 0, a: 0}
+    - _WaveDir: {r: 1, g: 1, b: 0.3, a: 2}
     - _WaveTiling: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -44,7 +44,7 @@
         // -------------------- noise depth shadow
         seaColor *= clampNoise;
 
-        half3 wpos = CalcWorldPos(screenUV);
+        half3 wpos = CalcWorldPos(screenUV);// scene world position
         half seaDepth = saturate(wpos.y - worldPos.y - _Depth);
 
         // -------------------- depth and shallow color
@@ -52,13 +52,15 @@
 
         // -------------------- caustics ,depth is 1
         half3 causticsColor = CalcFoamColor(uv,wpos,worldPos,0.5,0.3,0,blendNormal*2,clampNoise,_CausticsSpeed,_CausticsTiling);
-        // causticsColor *= _CausticsIntensity;
+        causticsColor *= _CausticsIntensity;
         // seaColor += causticsColor;
-        
+        // return causticsColor.xyzx;
         // -------------------- refraction color
-        half refractionRate = lerp(clampNoise,0,seaDepth);
-        half3 refractionColor = tex2D(_CameraOpaqueTexture,screenUV + blendNormal.xz * clampNoise * refractionRate*0.05 * _RefractionIntensity);
-        refractionColor = saturate(lerp(refractionColor,causticsColor,_CausticsIntensity));
+        // half refractionRate = lerp(clampNoise,0,seaDepth);
+        half3 refractionColor = tex2D(_CameraOpaqueTexture,screenUV + blendNormal.xz * clampNoise * _RefractionIntensity);
+        // refractionColor += causticsColor;
+        refractionColor = lerp(causticsColor,refractionColor,seaDepth);
+        // refractionColor = saturate(lerp(refractionColor,causticsColor,_CausticsIntensity));
         seaColor = lerp(seaColor,refractionColor,seaDepth);
 
         // -------------------- foam, depth is 0.5
