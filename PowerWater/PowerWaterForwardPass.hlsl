@@ -72,8 +72,6 @@
         return o;
     }
 
-
-
     half4 frag (v2f i) : SV_Target
     {
         half2 mainUV = i.uvNoise.xy;
@@ -94,7 +92,12 @@
 
 //------ brdf info
         half3 l = GetWorldSpaceLightDir(worldPos);
+
+        if(_FixedViewOn){
+            _WorldSpaceCameraPos = _ViewPosition;
+        }
         half3 v = normalize(GetWorldSpaceViewDir(worldPos));
+
         half3 h = normalize(l+v);
         half nl = saturate(dot(n,l));
         half nv = saturate(dot(n,v));
@@ -150,6 +153,7 @@
 
         half3 radiance = nl * _MainLightColor.xyz;
         half specTerm = MinimalistCookTorrance(nh,lh,a,a2);
+
         col.xyz += (diffColor + specColor * specTerm) * radiance;
 //---------emission
         col.xyz += emissionColor;

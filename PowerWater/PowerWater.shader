@@ -50,6 +50,10 @@ Shader "URP/PowerWater"
         _CausticsIntensity("_CausticsIntensity",range(0,3)) = 1
         _CausticsSpeed("_CausticsSpeed",float) = 1
         _CausticsTiling("_CausticsTiling",float) = 1
+
+        [Header(Sun And Eye)]
+        [Toggle]_FixedViewOn("_FixedViewOn",int) = 0
+        _ViewPosition("_ViewPosition",vector) = (10,-10,10)
     }
     SubShader
     {

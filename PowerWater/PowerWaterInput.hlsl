@@ -26,6 +26,9 @@
     half _RefractionIntensity;
     half _CausticsIntensity,_CausticsTiling,_CausticsSpeed;
 
+    half _FixedViewOn;
+    half3 _ViewPosition;
+
     CBUFFER_END            
 
 #endif //POWER_WATER_INPUT_HLSL
