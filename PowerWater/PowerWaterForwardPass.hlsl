@@ -35,7 +35,8 @@
         half3 worldPos = TransformObjectToWorld(v.vertex.xyz);
         half2 noiseUV = CalcOffsetTiling(worldPos.xz * _WaveTiling.xy,_WaveDir,_WaveSpeed,1);
         half simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale) ;
-        simpleNoise = (simpleNoise -0.5)*2;
+        // simpleNoise = (simpleNoise -0.5)*2;
+        simpleNoise = smoothstep(_WaveNoiseMin,_WaveNoiseMax,simpleNoise);
 
 
         half3 tangent = v.tangent.xyz;//normalize(half3(1,simpleNoise,0));
@@ -80,7 +81,8 @@
         half3 vertexNormal = normalize(half3(i.tSpace0.z,i.tSpace1.z,i.tSpace2.z));
 
         // half2 noiseUV = CalcOffsetTiling(worldPos.xz * _WaveTiling.xy,_WaveDir,_WaveSpeed,1);
-        // half simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale);
+        // simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale);
+        // return simpleNoise;
 // blend 2 normals 
         half3 n = Blend2Normals(worldPos,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
 
@@ -98,10 +100,10 @@
         half nh = saturate(dot(n,h));
         half lh = saturate(dot(l,h));
 // calc sea color
-        half waveCreast = smoothstep(_WaveCrestMin,_WaveCrestMax,simpleNoise);
-        
+        half waveCrestColor = smoothstep(_WaveCrestMin,_WaveCrestMax,simpleNoise);
+// return waveCrestColor;        
         half3 seaColor = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV);
-        seaColor += waveCreast;
+        seaColor += waveCrestColor;
 // return seaColor.xyzx;
         half3 emissionColor = 0;
 //-------- pbr
@@ -137,7 +139,7 @@
 
         // _GlossyEnvironmentCubeMap
         envColor = SAMPLE_TEXTURECUBE_LOD(_ReflectionCubemap,sampler_ReflectionCubemap,reflectDir,mip);
-        envColor.xyz = DecodeHDREnvironment(envColor,_ReflectionCubemap_HDR);
+        envColor.xyz = DecodeHDREnvironment(envColor,_ReflectionCubemap_HDR) * _ReflectionIndentity;
 
         half surfaceReduction = 1/(a2+1);
         half grazingTerm = saturate(smoothness + metallic);
@@ -153,6 +155,7 @@
         col.xyz += (diffColor + specColor * specTerm) * radiance;
 //---------emission
         col.xyz += emissionColor;
-        return col;
+        
+        return saturate(col);
     }
 #endif //POWER_WATER_FORWARD_PASS_HLSL

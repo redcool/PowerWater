@@ -29,6 +29,7 @@
     half4 _WaveDir;
     half _WaveScale,_WaveSpeed,_WaveStrength;
     half _WaveCrestMax,_WaveCrestMin;
+    half _WaveNoiseMin,_WaveNoiseMax;
 
     half4 _FoamTex_ST;
     half _FoamDepthMin,_FoamDepthMax,_FoamSpeed;
@@ -41,6 +42,7 @@
 
 
     half3 _ReflectDirOffset;
+    half _ReflectionIndentity;
 
     CBUFFER_END            
 

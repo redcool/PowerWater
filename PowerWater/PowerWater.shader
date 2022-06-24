@@ -22,6 +22,11 @@ Shader "URP/PowerWater"
         _WaveScale("_WaveScale",float) = 1
         _WaveSpeed("_WaveSpeed",float) = 1
         _WaveStrength("_WaveStrength",float) = 1
+
+        [Header(Wave Noise)]
+        _WaveNoiseMin("_WaveNoiseMin",range(0,1)) = 0.5
+        _WaveNoiseMax("_WaveNoiseMax",range(0,1)) = 1
+
         [Header(Wave Crest)]
         _WaveCrestMin("_WaveCrestMin",range(0,1)) = 0.3
         _WaveCrestMax("_WaveCrestMax",range(0,1)) = 0.5
@@ -43,6 +48,7 @@ Shader "URP/PowerWater"
         [Header(Reflection)]
         [noscaleoffset]_ReflectionCubemap("_ReflectionCubemap",cube) = ""{}
         _ReflectDirOffset("_ReflectDirOffset",vector) = (0,0,0,0)
+        _ReflectionIndentity("_ReflectionIndentity",float) = 1
 
         [Header(Foam)]
         _FoamTex("_FoamTex",2d) = ""{}
