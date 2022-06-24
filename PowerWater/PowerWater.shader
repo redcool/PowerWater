@@ -40,6 +40,10 @@ Shader "URP/PowerWater"
         [Header(Refraction)]
         _RefractionIntensity("_RefractionIntensity",range(0,1)) = 0.5
 
+        [Header(Reflection)]
+        [noscaleoffset]_ReflectionCubemap("_ReflectionCubemap",cube) = ""{}
+        _ReflectDirOffset("_ReflectDirOffset",vector) = (0,0,0,0)
+
         [Header(Foam)]
         _FoamTex("_FoamTex",2d) = ""{}
         _FoamDepthMin("_FoamDepthMin",range(0,1)) = 0

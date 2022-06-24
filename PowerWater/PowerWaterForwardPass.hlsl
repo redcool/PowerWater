@@ -5,12 +5,6 @@
     #include "PowerLib/NodeLib.hlsl"
     #include "PowerLib/URP_GI.hlsl"
 
-    sampler2D _MainTex;
-    sampler2D _NormalMap;
-    sampler2D _PBRMask;
-    sampler2D _CameraOpaqueTexture;
-    sampler2D _CameraDepthTexture;
-    sampler2D _FoamTex;
 
     #include "PowerWaterInput.hlsl"
     #include "PowerWaterCore.hlsl"
@@ -139,11 +133,13 @@
         half4 envColor = 0;
         // envColor.xyz = GlossyEnvironmentReflection(reflectDir,worldPos,roughness,1);
 // ibl as reflection
-        envColor = SAMPLE_TEXTURECUBE_LOD(_GlossyEnvironmentCubeMap,sampler_GlossyEnvironmentCubeMap,reflectDir,mip);
-        envColor.xyz = DecodeHDREnvironment(envColor,_GlossyEnvironmentCubeMap_HDR);
+        reflectDir += _ReflectDirOffset;
+
+        // _GlossyEnvironmentCubeMap
+        envColor = SAMPLE_TEXTURECUBE_LOD(_ReflectionCubemap,sampler_ReflectionCubemap,reflectDir,mip);
+        envColor.xyz = DecodeHDREnvironment(envColor,_ReflectionCubemap_HDR);
 
         half surfaceReduction = 1/(a2+1);
-        
         half grazingTerm = saturate(smoothness + metallic);
         half fresnelTerm = Pow4(1-nv);
         half3 giSpec = surfaceReduction * envColor.xyz * lerp(specColor,grazingTerm,fresnelTerm);

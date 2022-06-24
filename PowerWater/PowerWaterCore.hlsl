@@ -49,7 +49,6 @@
 
         // -------------------- depth and shallow color
         seaColor *= lerp(_DepthColor,_ShallowColor,seaDepth);
-
         // -------------------- caustics ,depth is 1
         half3 causticsColor = CalcFoamColor(uv,wpos,worldPos,0.5,0.3,0,blendNormal*2,clampNoise,_CausticsSpeed,_CausticsTiling);
         causticsColor *= _CausticsIntensity;
@@ -66,9 +65,6 @@
         // -------------------- foam, depth is 0.5
         half3 foamColor =  CalcFoamColor(uv,wpos,worldPos,0.5,_FoamDepthMin,_FoamDepthMax,blendNormal,clampNoise,_FoamSpeed,_FoamTex_ST.xy);
         seaColor += foamColor;
-
-
-
 
         return seaColor;
     }

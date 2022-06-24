@@ -1,6 +1,16 @@
 #if !defined(POWER_WATER_INPUT_HLSL)
 #define POWER_WATER_INPUT_HLSL
             
+    sampler2D _MainTex;
+    sampler2D _NormalMap;
+    sampler2D _PBRMask;
+    sampler2D _CameraOpaqueTexture;
+    sampler2D _CameraDepthTexture;
+    sampler2D _FoamTex;
+
+    TEXTURECUBE(_ReflectionCubemap); SAMPLER(sampler_ReflectionCubemap);
+    half4 _ReflectionCubemap_HDR;
+    
     CBUFFER_START(UnityPerMaterial)
     half _Smoothness;
     half _Metallic;
@@ -28,6 +38,9 @@
 
     half _FixedViewOn;
     half3 _ViewPosition;
+
+
+    half3 _ReflectDirOffset;
 
     CBUFFER_END            
 
