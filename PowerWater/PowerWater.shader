@@ -27,7 +27,7 @@ Shader "URP/PowerWater"
         _WaveNoiseMin("_WaveNoiseMin",range(0,1)) = 0.5
         _WaveNoiseMax("_WaveNoiseMax",range(0,1)) = 1
 
-        [Header(Wave Crest)]
+        [Header(Wave Crest Color)]
         _WaveCrestMin("_WaveCrestMin",range(0,1)) = 0.3
         _WaveCrestMax("_WaveCrestMax",range(0,1)) = 0.5
 
