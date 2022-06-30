@@ -9,7 +9,7 @@
     sampler2D _FoamTex;
 
     TEXTURECUBE(_ReflectionCubemap); SAMPLER(sampler_ReflectionCubemap);
-    half4 _ReflectionCubemap_HDR;
+
     
     CBUFFER_START(UnityPerMaterial)
     half _Smoothness;
@@ -43,7 +43,7 @@
 
     half3 _ReflectDirOffset;
     half _ReflectionIntensity;
-
+    half4 _ReflectionCubemap_HDR;
     CBUFFER_END            
 
 #endif //POWER_WATER_INPUT_HLSL

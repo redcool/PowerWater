@@ -3,13 +3,13 @@
     #include "PowerLib/UnityLib.hlsl"
     #include "PowerLib/PowerUtils.hlsl"
     #include "PowerLib/NodeLib.hlsl"
-    #include "PowerLib/URP_GI.hlsl"
+	#include "PowerLib/URPLib/Lighting.hlsl"
+
 
 
     #include "PowerWaterInput.hlsl"
     #include "PowerWaterCore.hlsl"
     #include "PowerLib/WaveLib.hlsl"
-	#include "PowerLib/Lighting.hlsl"
 
     struct appdata
     {
@@ -34,7 +34,7 @@
         v2f o = (v2f)0;
 // simple noise
         float3 worldPos = TransformObjectToWorld(v.vertex.xyz);
-        float2 noiseUV = CalcOffsetTiling(worldPos.xz * _WaveTiling.xy,_WaveDir,_WaveSpeed,1);
+        float2 noiseUV = CalcOffsetTiling(worldPos.xz * _WaveTiling.xy,_WaveDir.xy,_WaveSpeed,1);
         float simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale) ;
         // simpleNoise = (simpleNoise -0.5)*2;
         simpleNoise = smoothstep(_WaveNoiseMin,_WaveNoiseMax,simpleNoise);
@@ -50,7 +50,7 @@
             simpleNoise = v.vertex.y;
         }
 
-        o.vertex = TransformObjectToHClip(v.vertex);
+        o.vertex = TransformObjectToHClip(v.vertex.xyz);
 
         o.uvNoise.xy = v.uv;
         o.uvNoise.z = simpleNoise;
@@ -124,7 +124,7 @@
         float3 diffColor = albedo * (1-metallic);
         float3 specColor = lerp(0.04,albedo,metallic);
 		float3 giDiff = CalcGIDiff(n,diffColor);
-		float3 giSpec = CalcGISpec(_ReflectionCubemap,sampler_ReflectionCubemap,specColor,n,v,_ReflectDirOffset,_ReflectionIntensity,nv,roughness,a2,smoothness,metallic);
+		float3 giSpec = CalcGISpec(_ReflectionCubemap,sampler_ReflectionCubemap,_ReflectionCubemap_HDR,specColor,n,v,_ReflectDirOffset,_ReflectionIntensity,nv,roughness,a2,smoothness,metallic);
 
         float4 col = 0;
         col.xyz = (giDiff + giSpec) * occlusion;
@@ -133,7 +133,7 @@
         col.xyz += CalcLight(mainLight,diffColor,specColor,n,v,a,a2);
 
 		#if defined(_ADDITIONAL_LIGHTS)
-			col.xyz += CalcAdditionalLight(worldPos,diffColor,specColor,n,v,a,a2);
+			col.xyz += CalcAdditionalLights(worldPos,diffColor,specColor,n,v,a,a2,0,0,0);
 		#endif
 
 //---------emission

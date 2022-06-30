@@ -5,7 +5,7 @@
         return uv ;
     }
     half3 CalcWorldPos(half2 screenUV){
-        half depth = tex2D(_CameraDepthTexture,screenUV);
+        half depth = tex2D(_CameraDepthTexture,screenUV).x;
         half3 wpos = ScreenToWorldPos(screenUV,depth,unity_MatrixInvVP);
         return wpos;
     }
@@ -33,14 +33,14 @@
 // return foamDepth;
         half2 foamOffset = blendNormal.xz*0.05 + half2(clampNoise*0.1,0);
         foamOffset *= offsetSpeed;
-        half3 foamTex = tex2D(_FoamTex,uv * uvTiling + foamOffset);
+        half3 foamTex = tex2D(_FoamTex,uv * uvTiling + foamOffset).xyz;
         return foamTex * foamDepth;
     }
 
     half3 CalcSeaColor(half2 screenUV,half3 worldPos,half3 vertexNormal,half3 viewDir,half clampNoise,half3 blendNormal,half2 uv){
         // -------------------- fresnel color
         half fresnel = 1-saturate(dot(vertexNormal,viewDir));
-        half3 seaColor = lerp(_Color1,_Color2,fresnel);
+        half3 seaColor = lerp(_Color1,_Color2,fresnel).xyz;
         // -------------------- noise depth shadow
         seaColor *= clampNoise;
 
@@ -48,7 +48,7 @@
         half seaDepth = saturate(wpos.y - worldPos.y - _Depth);
 
         // -------------------- depth and shallow color
-        seaColor *= lerp(_DepthColor,_ShallowColor,seaDepth);
+        seaColor *= lerp(_DepthColor,_ShallowColor,seaDepth).xyz;
         // -------------------- caustics ,depth is 1
         half3 causticsColor = CalcFoamColor(uv,wpos,worldPos,0.5,0.3,0,blendNormal*2,clampNoise,_CausticsSpeed,_CausticsTiling);
         causticsColor *= _CausticsIntensity;
@@ -56,7 +56,7 @@
         // return causticsColor.xyzx;
         // -------------------- refraction color
         // half refractionRate = lerp(clampNoise,0,seaDepth);
-        half3 refractionColor = tex2D(_CameraOpaqueTexture,screenUV + blendNormal.xz * clampNoise * _RefractionIntensity);
+        half3 refractionColor = tex2D(_CameraOpaqueTexture,screenUV + blendNormal.xz * clampNoise * _RefractionIntensity).xyz;
         // refractionColor += causticsColor;
         refractionColor = lerp(causticsColor,refractionColor,seaDepth);
         // refractionColor = saturate(lerp(refractionColor,causticsColor,_CausticsIntensity));

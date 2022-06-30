@@ -8,9 +8,6 @@
 #define CALCULATE_BAKED_SHADOWS
 #endif
 
-#define CustomShadowNormalBias() 0
-#define CustomShadowDepthBias() 0
-#define _ReceiveShadow 0
 
 TEXTURE2D_SHADOW(_MainLightShadowmapTexture);SAMPLER_CMP(sampler_MainLightShadowmapTexture);
 
@@ -75,13 +72,13 @@ half4 TransformWorldToShadowCoord(half3 positionWS)
     half4 _ShadowBias; // x: depth bias, y: normal bias
     half _MainLightShadowOn; //send  from PowerUrpLitFeature
 
-    half3 ApplyShadowBias(half3 positionWS, half3 normalWS, half3 lightDirection)
+    half3 ApplyShadowBias(half3 positionWS, half3 normalWS, half3 lightDirection,half matShadowNormalBias,half matShadowDepthBias)
     {
         half invNdotL = 1.0 - saturate(dot(lightDirection, normalWS));
-        half scale = invNdotL * (_ShadowBias.y + CustomShadowNormalBias());
+        half scale = invNdotL * (_ShadowBias.y + matShadowNormalBias);
 
         // normal bias is negative since we want to apply an inset normal offset
-        positionWS = lightDirection * (_ShadowBias.xxx + CustomShadowDepthBias()) + positionWS;
+        positionWS = lightDirection * (_ShadowBias.xxx + matShadowDepthBias) + positionWS;
         positionWS = normalWS * scale.xxx + positionWS;
         return positionWS;
     }

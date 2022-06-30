@@ -1,6 +1,9 @@
 #if !defined(LIGHTING_HLSL)
-    #include "URPLib/URP_Lighting.hlsl"
+#define LIGHTING_HLSL
 
+    #include "URP_GI.hlsl"
+    #include "URP_Lighting.hlsl"
+    
     float3 CalcLight(Light light,float3 diffColor,float3 specColor,float3 n,float3 v,float a,float a2){
         float3 l = light.direction;
         float3 h = normalize(l+v);
@@ -15,11 +18,11 @@
         return (diffColor + specColor * specTerm) * radiance  * light.color;
     }
 
-    float3 CalcAdditionalLight(float3 worldPos,float3 diffColor,float3 specColor,float3 n,float3 v,float a,float a2){
+    float3 CalcAdditionalLights(float3 worldPos,float3 diffColor,float3 specColor,float3 n,float3 v,float a,float a2,half receiveShadow,half softShadow,half4 shadowMask ){
         uint count = GetAdditionalLightsCount();
 		float3 c = 0;
-        for(int i=0;i<count;i++){
-			Light l = GetAdditionalLight(i,worldPos,0,0,0);
+        for(uint i=0;i<count;i++){
+			Light l = GetAdditionalLight(i,worldPos,receiveShadow,softShadow,shadowMask);
 			c += CalcLight(l,diffColor,specColor,n,v,a,a2);
         }
 		return c;
@@ -31,7 +34,7 @@
 		return giDiff;
 	}
 
-	float3 CalcGISpec(TEXTURECUBE_PARAM(_ReflectionCubemap,sampler_ReflectionCubemap),float3 specColor,float3 n,float3 v,
+	float3 CalcGISpec(TEXTURECUBE_PARAM(_ReflectionCubemap,sampler_ReflectionCubemap),float4 cubeMapHdr,float3 specColor,float3 n,float3 v,
 		float3 reflectDirOffset,float reflectionIndentity,float nv,float roughness,float a2,
 		float smoothness,float metallic)
 	{
@@ -45,7 +48,7 @@
 
         // _GlossyEnvironmentCubeMap
         envColor = SAMPLE_TEXTURECUBE_LOD(_ReflectionCubemap,sampler_ReflectionCubemap,reflectDir,mip);
-        envColor.xyz = DecodeHDREnvironment(envColor,_ReflectionCubemap_HDR) * reflectionIndentity;
+        envColor.xyz = DecodeHDREnvironment(envColor,cubeMapHdr) * reflectionIndentity;
 
         float surfaceReduction = 1/(a2+1);
         float grazingTerm = saturate(smoothness + metallic);
