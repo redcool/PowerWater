@@ -48,7 +48,7 @@ Shader "URP/PowerWater"
         [Header(Reflection)]
         [noscaleoffset]_ReflectionCubemap("_ReflectionCubemap",cube) = ""{}
         _ReflectDirOffset("_ReflectDirOffset",vector) = (0,0,0,0)
-        _ReflectionIndentity("_ReflectionIndentity",float) = 1
+        _ReflectionIntensity("_ReflectionIntensity",float) = 1
 
         [Header(Foam)]
         _FoamTex("_FoamTex",2d) = ""{}
@@ -75,7 +75,7 @@ Shader "URP/PowerWater"
             #pragma fragment frag
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
-
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHTS
 
             // #define _REFLECTION_PROBE_BLENDING
             // #define _REFLECTION_PROBE_BOX_PROJECTION

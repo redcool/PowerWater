@@ -37,7 +37,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ReflectionCubemap:
-        m_Texture: {fileID: 8900000, guid: ee4462592778b4a49b63428c6861d04d, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -49,20 +49,20 @@ Material:
     - _Depth: -1.32
     - _FixedViewOn: 0
     - _FoamDepthMax: 1
-    - _FoamDepthMin: 0.11
+    - _FoamDepthMin: 0
     - _FoamSpeed: 1
     - _Metallic: 0
     - _NormalScale: 1.55
     - _NormalSpeed: 1
     - _NormalTiling: -0.09
     - _Occlusion: 0
-    - _ReflectionIndentity: 1.81
+    - _ReflectionIntensity: 1.81
     - _RefractionIntensity: 1
     - _Smoothness: 0.73
-    - _WaveCrestMax: 1
-    - _WaveCrestMin: 0
-    - _WaveNoiseMax: 1
-    - _WaveNoiseMin: 0
+    - _WaveCrestMax: 0.916
+    - _WaveCrestMin: 0.503
+    - _WaveNoiseMax: 0.555
+    - _WaveNoiseMin: 0.173
     - _WaveScale: 4.62
     - _WaveSpeed: 0.52
     - _WaveStrength: 0.41

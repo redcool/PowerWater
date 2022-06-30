@@ -42,7 +42,7 @@
 
 
     half3 _ReflectDirOffset;
-    half _ReflectionIndentity;
+    half _ReflectionIntensity;
 
     CBUFFER_END            
 
