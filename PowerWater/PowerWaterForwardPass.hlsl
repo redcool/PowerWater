@@ -129,7 +129,7 @@
         float4 col = 0;
         col.xyz = (giDiff + giSpec) * occlusion;
 
-        Light mainLight = {_MainLightPosition.xyz,_MainLightColor.xyz,1,1};
+        Light mainLight = GetMainLight();
         col.xyz += CalcLight(mainLight,diffColor,specColor,n,v,a,a2);
 
 		#if defined(_ADDITIONAL_LIGHTS)

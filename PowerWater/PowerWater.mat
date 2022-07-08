@@ -46,7 +46,7 @@ Material:
     - _CausticsIntensity: 0
     - _CausticsSpeed: 0
     - _CausticsTiling: 1
-    - _Depth: -1.32
+    - _Depth: -1.56
     - _FixedViewOn: 0
     - _FoamDepthMax: 1
     - _FoamDepthMin: 0.11
@@ -56,10 +56,13 @@ Material:
     - _NormalSpeed: 1
     - _NormalTiling: -0.09
     - _Occlusion: 0
+    - _ReflectionIntensity: 1
     - _RefractionIntensity: 1
     - _Smoothness: 0.73
     - _WaveCrestMax: 1
     - _WaveCrestMin: 0.12
+    - _WaveNoiseMax: 1
+    - _WaveNoiseMin: 0.5
     - _WaveScale: 11.5
     - _WaveSpeed: -0.04
     - _WaveStrength: -0.1

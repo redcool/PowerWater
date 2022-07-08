@@ -12,10 +12,10 @@
 #define CBUFFER_START(name) cbuffer name {
 #define CBUFFER_END };
 
-float4 _MainLightPosition,_WorldSpaceLightPos0;
-float4 _MainLightColor,_LightColor0;
 
 #if defined(DRP)
+float4 _WorldSpaceLightPos0;
+float4 _LightColor0;
 #define _MainLightPosition _WorldSpaceLightPos0
 #define _MainLightColor _LightColor0
 #endif

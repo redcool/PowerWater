@@ -7,29 +7,8 @@
 #else
     #define MAX_VISIBLE_LIGHTS 256
 #endif
-
+#include "URP_Input.hlsl"
 #include "URP_AdditionalLightShadows.hlsl"
-
-//-------------------- urp Lighting.cginc
-float4 _AdditionalLightsCount;
-
-#if USE_STRUCTURED_BUFFER_FOR_LIGHT_DATA
-StructuredBuffer<LightData> _AdditionalLightsBuffer;
-StructuredBuffer<int> _AdditionalLightsIndices;
-#else
-// GLES3 causes a performance regression in some devices when using CBUFFER.
-#ifndef SHADER_API_GLES3
-CBUFFER_START(AdditionalLights)
-#endif
-float4 _AdditionalLightsPosition[MAX_VISIBLE_LIGHTS];
-float4 _AdditionalLightsColor[MAX_VISIBLE_LIGHTS];
-float4 _AdditionalLightsAttenuation[MAX_VISIBLE_LIGHTS];
-float4 _AdditionalLightsSpotDir[MAX_VISIBLE_LIGHTS];
-float4 _AdditionalLightsOcclusionProbes[MAX_VISIBLE_LIGHTS];
-#ifndef SHADER_API_GLES3
-CBUFFER_END
-#endif
-#endif
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,7 +22,10 @@ struct Light
     float3   color;
     float    distanceAttenuation;
     float    shadowAttenuation;
+    uint layerMask;
 };
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //                        Attenuation Functions                               /
@@ -94,6 +76,28 @@ float AngleAttenuation(float3 spotDirection, float3 lightDirection, float2 spotA
     float SdotL = dot(spotDirection, lightDirection);
     float atten = saturate(SdotL * spotAttenuation.x + spotAttenuation.y);
     return atten * atten;
+}
+
+
+Light GetMainLight()
+{
+    Light light;
+    light.direction = half3(_MainLightPosition.xyz);
+#if USE_CLUSTERED_LIGHTING
+    light.distanceAttenuation = 1.0;
+#else
+    light.distanceAttenuation = unity_LightData.z; // unity_LightData.z is 1 when not culled by the culling mask, otherwise 0.
+#endif
+    light.shadowAttenuation = 1.0;
+    light.color = _MainLightColor.rgb;
+
+#ifdef _LIGHT_LAYERS
+    light.layerMask = _MainLightLayerMask;
+#else
+    light.layerMask = DEFAULT_LIGHT_LAYERS;
+#endif
+
+    return light;
 }
 
 // Fills a light struct given a perObjectLightIndex
