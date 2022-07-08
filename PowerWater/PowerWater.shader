@@ -11,9 +11,15 @@ Shader "URP/PowerWater"
 
         [Header(Normal)]
         [NoScaleOffset]_NormalMap("_NormalMap",2d) = "bump"{}
-        _NormalScale("_NormalScale",float) = .3
-        _NormalSpeed("_NormalSpeed",float) = 1
+        _NormalScale("_NormalScale",range(0,4)) = .3
+        _NormalSpeed("_NormalSpeed",range(0,2)) = 1
         _NormalTiling("_NormalTiling",float) = 1
+
+        [Header(PBR Mask)]
+        _PBRMask("_PBRMask(Metallic:R,Smoothness:G,Occlusion:B)",2d)="white"{}
+        _Metallic("_Metallic",range(0,1)) = 0.5
+        _Smoothness("_Smoothness",range(0,1)) = 0.5
+        _Occlusion("_Occlusion",range(0,1)) = 0
 
         [Header(Wave)]
         [Enum(None,0, ApplyGerstnerWave, 1)]_ApplyGerstnerWaveOn("_ApplyGerstnerWaveOn",int) = 0
@@ -31,11 +37,6 @@ Shader "URP/PowerWater"
         _WaveCrestMin("_WaveCrestMin",range(0,1)) = 0.3
         _WaveCrestMax("_WaveCrestMax",range(0,1)) = 0.5
 
-        [Header(PBR Mask)]
-        _PBRMask("_PBRMask(Metallic:R,Smoothness:G,Occlusion:B)",2d)="white"{}
-        _Metallic("_Metallic",range(0,1)) = 0.5
-        _Smoothness("_Smoothness",range(0,1)) = 0.5
-        _Occlusion("_Occlusion",range(0,1)) = 0
 
         [Header(Depth)]
         _Depth("_Depth",float) = 1
