@@ -11,7 +11,7 @@
 #include "URP_AdditionalLightShadows.hlsl"
 
 //-------------------- urp Lighting.cginc
-half4 _AdditionalLightsCount;
+float4 _AdditionalLightsCount;
 
 #if USE_STRUCTURED_BUFFER_FOR_LIGHT_DATA
 StructuredBuffer<LightData> _AdditionalLightsBuffer;
@@ -21,11 +21,11 @@ StructuredBuffer<int> _AdditionalLightsIndices;
 #ifndef SHADER_API_GLES3
 CBUFFER_START(AdditionalLights)
 #endif
-half4 _AdditionalLightsPosition[MAX_VISIBLE_LIGHTS];
-half4 _AdditionalLightsColor[MAX_VISIBLE_LIGHTS];
-half4 _AdditionalLightsAttenuation[MAX_VISIBLE_LIGHTS];
-half4 _AdditionalLightsSpotDir[MAX_VISIBLE_LIGHTS];
-half4 _AdditionalLightsOcclusionProbes[MAX_VISIBLE_LIGHTS];
+float4 _AdditionalLightsPosition[MAX_VISIBLE_LIGHTS];
+float4 _AdditionalLightsColor[MAX_VISIBLE_LIGHTS];
+float4 _AdditionalLightsAttenuation[MAX_VISIBLE_LIGHTS];
+float4 _AdditionalLightsSpotDir[MAX_VISIBLE_LIGHTS];
+float4 _AdditionalLightsOcclusionProbes[MAX_VISIBLE_LIGHTS];
 #ifndef SHADER_API_GLES3
 CBUFFER_END
 #endif
@@ -39,10 +39,10 @@ CBUFFER_END
 // Abstraction over Light shading data.
 struct Light
 {
-    half3   direction;
-    half3   color;
-    half    distanceAttenuation;
-    half    shadowAttenuation;
+    float3   direction;
+    float3   color;
+    float    distanceAttenuation;
+    float    shadowAttenuation;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,15 +57,15 @@ struct Light
 #endif
 // Matches Unity Vanila attenuation
 // Attenuation smoothly decreases to light range.
-half DistanceAttenuation(half distanceSqr, half2 distanceAttenuation)
+float DistanceAttenuation(float distanceSqr, float2 distanceAttenuation)
 {
     // We use a shared distance attenuation for additional directional and puctual lights
     // for directional lights attenuation will be 1
-    half lightAtten = rcp(distanceSqr);
+    float lightAtten = rcp(distanceSqr);
 #if SHADER_HINT_NICE_QUALITY
     // Use the smoothing factor also used in the Unity lightmapper.
-    half factor = distanceSqr * distanceAttenuation.x;
-    half smoothFactor = saturate(1.0h - factor * factor);
+    float factor = distanceSqr * distanceAttenuation.x;
+    float smoothFactor = saturate(1.0h - factor * factor);
     smoothFactor = smoothFactor * smoothFactor;
 #else
     // We need to smoothly fade attenuation to light range. We start fading linearly at 80% of light range
@@ -75,13 +75,13 @@ half DistanceAttenuation(half distanceSqr, half2 distanceAttenuation)
     // We can rewrite that to fit a MAD by doing
     // distanceSqr * (1.0 / (fadeDistanceSqr - lightRangeSqr)) + (-lightRangeSqr / (fadeDistanceSqr - lightRangeSqr)
     // distanceSqr *        distanceAttenuation.y            +             distanceAttenuation.z
-    half smoothFactor = saturate(distanceSqr * distanceAttenuation.x + distanceAttenuation.y);
+    float smoothFactor = saturate(distanceSqr * distanceAttenuation.x + distanceAttenuation.y);
 #endif
 
     return lightAtten * smoothFactor;
 }
 
-half AngleAttenuation(half3 spotDirection, half3 lightDirection, half2 spotAttenuation)
+float AngleAttenuation(float3 spotDirection, float3 lightDirection, float2 spotAttenuation)
 {
     // Spot Attenuation with a linear falloff can be defined as
     // (SdotL - cosOuterAngle) / (cosInnerAngle - cosOuterAngle)
@@ -91,34 +91,34 @@ half AngleAttenuation(half3 spotDirection, half3 lightDirection, half2 spotAtten
     // SdotL * spotAttenuation.x + spotAttenuation.y
 
     // If we precompute the terms in a MAD instruction
-    half SdotL = dot(spotDirection, lightDirection);
-    half atten = saturate(SdotL * spotAttenuation.x + spotAttenuation.y);
+    float SdotL = dot(spotDirection, lightDirection);
+    float atten = saturate(SdotL * spotAttenuation.x + spotAttenuation.y);
     return atten * atten;
 }
 
 // Fills a light struct given a perObjectLightIndex
-Light GetAdditionalPerObjectLight(int perObjectLightIndex, half3 positionWS)
+Light GetAdditionalPerObjectLight(int perObjectLightIndex, float3 positionWS)
 {
     // Abstraction over Light input constants
 #if USE_STRUCTURED_BUFFER_FOR_LIGHT_DATA
-    half4 lightPositionWS = _AdditionalLightsBuffer[perObjectLightIndex].position;
-    half3 color = _AdditionalLightsBuffer[perObjectLightIndex].color.rgb;
-    half4 distanceAndSpotAttenuation = _AdditionalLightsBuffer[perObjectLightIndex].attenuation;
-    half4 spotDirection = _AdditionalLightsBuffer[perObjectLightIndex].spotDirection;
+    float4 lightPositionWS = _AdditionalLightsBuffer[perObjectLightIndex].position;
+    float3 color = _AdditionalLightsBuffer[perObjectLightIndex].color.rgb;
+    float4 distanceAndSpotAttenuation = _AdditionalLightsBuffer[perObjectLightIndex].attenuation;
+    float4 spotDirection = _AdditionalLightsBuffer[perObjectLightIndex].spotDirection;
 #else
-    half4 lightPositionWS = _AdditionalLightsPosition[perObjectLightIndex];
-    half3 color = _AdditionalLightsColor[perObjectLightIndex].rgb;
-    half4 distanceAndSpotAttenuation = _AdditionalLightsAttenuation[perObjectLightIndex];
-    half4 spotDirection = _AdditionalLightsSpotDir[perObjectLightIndex];
+    float4 lightPositionWS = _AdditionalLightsPosition[perObjectLightIndex];
+    float3 color = _AdditionalLightsColor[perObjectLightIndex].rgb;
+    float4 distanceAndSpotAttenuation = _AdditionalLightsAttenuation[perObjectLightIndex];
+    float4 spotDirection = _AdditionalLightsSpotDir[perObjectLightIndex];
 #endif
 
     // Directional lights store direction in lightPosition.xyz and have .w set to 0.0.
     // This way the following code will work for both directional and punctual lights.
-    half3 lightVector = lightPositionWS.xyz - positionWS * lightPositionWS.w;
-    half distanceSqr = max(dot(lightVector, lightVector), HALF_MIN);
+    float3 lightVector = lightPositionWS.xyz - positionWS * lightPositionWS.w;
+    float distanceSqr = max(dot(lightVector, lightVector), HALF_MIN);
 
-    half3 lightDirection = half3(lightVector * rsqrt(distanceSqr));
-    half attenuation = DistanceAttenuation(distanceSqr, distanceAndSpotAttenuation.xy) * AngleAttenuation(spotDirection.xyz, lightDirection, distanceAndSpotAttenuation.zw);
+    float3 lightDirection = float3(lightVector * rsqrt(distanceSqr));
+    float attenuation = DistanceAttenuation(distanceSqr, distanceAndSpotAttenuation.xy) * AngleAttenuation(spotDirection.xyz, lightDirection, distanceAndSpotAttenuation.zw);
 
     Light light;
     light.direction = lightDirection;
@@ -157,16 +157,16 @@ int GetPerObjectLightIndex(uint index)
 /////////////////////////////////////////////////////////////////////////////////////////////
 // UBO path                                                                                 /
 //                                                                                          /
-// We store 8 light indices in half4 unity_LightIndices[2];                                /
-// Due to memory alignment unity doesn't support int[] or half[]                           /
-// Even trying to reinterpret cast the unity_LightIndices to half[] won't work             /
-// it will cast to half4[] and create extra register pressure. :(                          /
+// We store 8 light indices in float4 unity_LightIndices[2];                                /
+// Due to memory alignment unity doesn't support int[] or float[]                           /
+// Even trying to reinterpret cast the unity_LightIndices to float[] won't work             /
+// it will cast to float4[] and create extra register pressure. :(                          /
 /////////////////////////////////////////////////////////////////////////////////////////////
 #elif !defined(SHADER_API_GLES)
     // since index is uint shader compiler will implement
     // div & mod as bitfield ops (shift and mask).
 
-    // TODO: Can we index a half4? Currently compiler is
+    // TODO: Can we index a float4? Currently compiler is
     // replacing unity_LightIndicesX[i] with a dp4 with identity matrix.
     // u_xlat16_40 = dot(unity_LightIndices[int(u_xlatu13)], ImmCB_0_0_0[u_xlati1]);
     // This increases both arithmetic and register pressure.
@@ -176,23 +176,23 @@ int GetPerObjectLightIndex(uint index)
     // We limit to 4 indices per object and only sample unity_4LightIndices0.
     // Conditional moves are branch free even on mali-400
     // small arithmetic cost but no extra register pressure from ImmCB_0_0_0 matrix.
-    half2 lightIndex2 = (index < 2.0h) ? unity_LightIndices[0].xy : unity_LightIndices[0].zw;
-    half i_rem = (index < 2.0h) ? index : index - 2.0h;
+    float2 lightIndex2 = (index < 2.0h) ? unity_LightIndices[0].xy : unity_LightIndices[0].zw;
+    float i_rem = (index < 2.0h) ? index : index - 2.0h;
     return (i_rem < 1.0h) ? lightIndex2.x : lightIndex2.y;
 #endif
 }
 
 // Fills a light struct given a loop i index. This will convert the i
 // index to a perObjectLightIndex
-Light GetAdditionalLight(uint i, half3 positionWS,half receiveShadow,half softShadow,half4 shadowMask)
+Light GetAdditionalLight(uint i, float3 positionWS,float receiveShadow,float softShadow,float4 shadowMask)
 {
     int perObjectLightIndex = GetPerObjectLightIndex(i);
     Light light = GetAdditionalPerObjectLight(perObjectLightIndex, positionWS);
 
 #if USE_STRUCTURED_BUFFER_FOR_LIGHT_DATA
-    half4 occlusionProbeChannels = _AdditionalLightsBuffer[perObjectLightIndex].occlusionProbeChannels;
+    float4 occlusionProbeChannels = _AdditionalLightsBuffer[perObjectLightIndex].occlusionProbeChannels;
 #else
-    half4 occlusionProbeChannels = _AdditionalLightsOcclusionProbes[perObjectLightIndex];
+    float4 occlusionProbeChannels = _AdditionalLightsOcclusionProbes[perObjectLightIndex];
 #endif
 
     light.shadowAttenuation = 1;

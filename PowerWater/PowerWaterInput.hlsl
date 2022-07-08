@@ -12,38 +12,38 @@
 
     
     CBUFFER_START(UnityPerMaterial)
-    half _Smoothness;
-    half _Metallic;
-    half _Occlusion;
+    float _Smoothness;
+    float _Metallic;
+    float _Occlusion;
 
-    half _Depth;
-    half4 _DepthColor,_ShallowColor;
+    float _Depth;
+    float4 _DepthColor,_ShallowColor;
 
-    half _NormalScale;
-    // half4 _NormalMap_ST;
-    half _NormalSpeed,_NormalTiling;
-    half4 _Color2,_Color1;
+    float _NormalScale;
+    // float4 _NormalMap_ST;
+    float _NormalSpeed,_NormalTiling;
+    float4 _Color2,_Color1;
 
-    half _ApplyGerstnerWaveOn;
-    half2 _WaveTiling;
-    half4 _WaveDir;
-    half _WaveScale,_WaveSpeed,_WaveStrength;
-    half _WaveCrestMax,_WaveCrestMin;
-    half _WaveNoiseMin,_WaveNoiseMax;
+    float _ApplyGerstnerWaveOn;
+    float2 _WaveTiling;
+    float4 _WaveDir;
+    float _WaveScale,_WaveSpeed,_WaveStrength;
+    float _WaveCrestMax,_WaveCrestMin;
+    float _WaveNoiseMin,_WaveNoiseMax;
 
-    half4 _FoamTex_ST;
-    half _FoamDepthMin,_FoamDepthMax,_FoamSpeed;
+    float4 _FoamTex_ST;
+    float _FoamDepthMin,_FoamDepthMax,_FoamSpeed;
 
-    half _RefractionIntensity;
-    half _CausticsIntensity,_CausticsTiling,_CausticsSpeed;
+    float _RefractionIntensity;
+    float _CausticsIntensity,_CausticsTiling,_CausticsSpeed;
 
-    half _FixedViewOn;
-    half3 _ViewPosition;
+    float _FixedViewOn;
+    float3 _ViewPosition;
 
 
-    half3 _ReflectDirOffset;
-    half _ReflectionIntensity;
-    half4 _ReflectionCubemap_HDR;
+    float3 _ReflectDirOffset;
+    float _ReflectionIntensity;
+    float4 _ReflectionCubemap_HDR;
     CBUFFER_END            
 
 #endif //POWER_WATER_INPUT_HLSL

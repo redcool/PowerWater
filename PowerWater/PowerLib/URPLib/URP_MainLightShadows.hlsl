@@ -13,10 +13,10 @@ TEXTURE2D_SHADOW(_MainLightShadowmapTexture);SAMPLER_CMP(sampler_MainLightShadow
 
 #if defined(SHADER_API_MOBILE)
     static const int SOFT_SHADOW_COUNT = 2;
-    static const half SOFT_SHADOW_WEIGHTS[] = {0.2,0.4,0.4};
+    static const float SOFT_SHADOW_WEIGHTS[] = {0.2,0.4,0.4};
 #else
     static const int SOFT_SHADOW_COUNT = 4;
-    static const half SOFT_SHADOW_WEIGHTS[] = {0.2,0.25,0.25,0.15,0.15};
+    static const float SOFT_SHADOW_WEIGHTS[] = {0.2,0.25,0.25,0.15,0.15};
 #endif 
 
 #ifndef SHADER_API_GLES3
@@ -24,17 +24,17 @@ CBUFFER_START(MainLightShadows)
 #endif
     #define MAX_SHADOW_CASCADES 4
     half4x4    _MainLightWorldToShadow[MAX_SHADOW_CASCADES + 1];
-    half4      _CascadeShadowSplitSpheres0;
-    half4      _CascadeShadowSplitSpheres1;
-    half4      _CascadeShadowSplitSpheres2;
-    half4      _CascadeShadowSplitSpheres3;
-    half4      _CascadeShadowSplitSphereRadii;
-    half4       _MainLightShadowOffset0;
-    half4       _MainLightShadowOffset1;
-    half4       _MainLightShadowOffset2;
-    half4       _MainLightShadowOffset3;
-    half4       _MainLightShadowParams;  // (x: shadowStrength, y: 1.0 if soft shadows, 0.0 otherwise, z: oneOverFadeDist, w: minusStartFade)
-    half4      _MainLightShadowmapSize; // (xy: 1/width and 1/height, zw: width and height)
+    float4      _CascadeShadowSplitSpheres0;
+    float4      _CascadeShadowSplitSpheres1;
+    float4      _CascadeShadowSplitSpheres2;
+    float4      _CascadeShadowSplitSpheres3;
+    float4      _CascadeShadowSplitSphereRadii;
+    float4       _MainLightShadowOffset0;
+    float4       _MainLightShadowOffset1;
+    float4       _MainLightShadowOffset2;
+    float4       _MainLightShadowOffset3;
+    float4       _MainLightShadowParams;  // (x: shadowStrength, y: 1.0 if soft shadows, 0.0 otherwise, z: oneOverFadeDist, w: minusStartFade)
+    float4      _MainLightShadowmapSize; // (xy: 1/width and 1/height, zw: width and height)
 // CBUFFER_END
 #ifndef SHADER_API_GLES3
 CBUFFER_END
@@ -42,40 +42,40 @@ CBUFFER_END
 
 #define BEYOND_SHADOW_FAR(shadowCoord) shadowCoord.z <= 0.0 || shadowCoord.z >= 1.0
 
-half ComputeCascadeIndex(half3 positionWS)
+float ComputeCascadeIndex(float3 positionWS)
 {
-    half3 fromCenter0 = positionWS - _CascadeShadowSplitSpheres0.xyz;
-    half3 fromCenter1 = positionWS - _CascadeShadowSplitSpheres1.xyz;
-    half3 fromCenter2 = positionWS - _CascadeShadowSplitSpheres2.xyz;
-    half3 fromCenter3 = positionWS - _CascadeShadowSplitSpheres3.xyz;
-    half4 distances2 = half4(dot(fromCenter0, fromCenter0), dot(fromCenter1, fromCenter1), dot(fromCenter2, fromCenter2), dot(fromCenter3, fromCenter3));
+    float3 fromCenter0 = positionWS - _CascadeShadowSplitSpheres0.xyz;
+    float3 fromCenter1 = positionWS - _CascadeShadowSplitSpheres1.xyz;
+    float3 fromCenter2 = positionWS - _CascadeShadowSplitSpheres2.xyz;
+    float3 fromCenter3 = positionWS - _CascadeShadowSplitSpheres3.xyz;
+    float4 distances2 = float4(dot(fromCenter0, fromCenter0), dot(fromCenter1, fromCenter1), dot(fromCenter2, fromCenter2), dot(fromCenter3, fromCenter3));
 
-    half4 weights = half4(distances2 < _CascadeShadowSplitSphereRadii);
+    float4 weights = float4(distances2 < _CascadeShadowSplitSphereRadii);
     weights.yzw = saturate(weights.yzw - weights.xyz);
 
-    return 4 - dot(weights, half4(4, 3, 2, 1));
+    return 4 - dot(weights, float4(4, 3, 2, 1));
 }
 
-half4 TransformWorldToShadowCoord(half3 positionWS)
+float4 TransformWorldToShadowCoord(float3 positionWS)
 {
 #ifdef _MAIN_LIGHT_SHADOWS_CASCADE
-    half cascadeIndex = ComputeCascadeIndex(positionWS);
+    float cascadeIndex = ComputeCascadeIndex(positionWS);
 #else
-    half cascadeIndex = 0;
+    float cascadeIndex = 0;
 #endif
 
-    half4 shadowCoord = mul(_MainLightWorldToShadow[cascadeIndex], half4(positionWS, 1.0));
+    float4 shadowCoord = mul(_MainLightWorldToShadow[cascadeIndex], float4(positionWS, 1.0));
 
-    return half4(shadowCoord.xyz, cascadeIndex);
+    return float4(shadowCoord.xyz, cascadeIndex);
 }
 
-    half4 _ShadowBias; // x: depth bias, y: normal bias
-    half _MainLightShadowOn; //send  from PowerUrpLitFeature
+    float4 _ShadowBias; // x: depth bias, y: normal bias
+    float _MainLightShadowOn; //send  from PowerUrpLitFeature
 
-    half3 ApplyShadowBias(half3 positionWS, half3 normalWS, half3 lightDirection,half matShadowNormalBias,half matShadowDepthBias)
+    float3 ApplyShadowBias(float3 positionWS, float3 normalWS, float3 lightDirection,float matShadowNormalBias,float matShadowDepthBias)
     {
-        half invNdotL = 1.0 - saturate(dot(lightDirection, normalWS));
-        half scale = invNdotL * (_ShadowBias.y + matShadowNormalBias);
+        float invNdotL = 1.0 - saturate(dot(lightDirection, normalWS));
+        float scale = invNdotL * (_ShadowBias.y + matShadowNormalBias);
 
         // normal bias is negative since we want to apply an inset normal offset
         positionWS = lightDirection * (_ShadowBias.xxx + matShadowDepthBias) + positionWS;
@@ -83,28 +83,28 @@ half4 TransformWorldToShadowCoord(half3 positionWS)
         return positionWS;
     }
     
-    half GetShadowFade(half3 positionWS)
+    float GetShadowFade(float3 positionWS)
     {
-        half3 camToPixel = positionWS - _WorldSpaceCameraPos;
-        half distanceCamToPixel2 = dot(camToPixel, camToPixel);
+        float3 camToPixel = positionWS - _WorldSpaceCameraPos;
+        float distanceCamToPixel2 = dot(camToPixel, camToPixel);
 
-        half fade = saturate(distanceCamToPixel2 * _MainLightShadowParams.z + _MainLightShadowParams.w);
+        float fade = saturate(distanceCamToPixel2 * _MainLightShadowParams.z + _MainLightShadowParams.w);
         return fade;
     }
 
-    half SampleShadowmap(TEXTURE2D_SHADOW_PARAM(shadowMap,sampler_ShadowMap),half4 shadowCoord,half shadowSoftScale){
-        half shadow = SAMPLE_TEXTURE2D_SHADOW(shadowMap,sampler_ShadowMap, shadowCoord.xyz);
+    float SampleShadowmap(TEXTURE2D_SHADOW_PARAM(shadowMap,sampler_ShadowMap),float4 shadowCoord,float shadowSoftScale){
+        float shadow = SAMPLE_TEXTURE2D_SHADOW(shadowMap,sampler_ShadowMap, shadowCoord.xyz);
 
         // return shadow;
         shadow *= SOFT_SHADOW_WEIGHTS[0];
 
-        half2 psize = _MainLightShadowmapSize.xy * shadowSoftScale;
-        const half2 uvs[] = { half2(-psize.x,0),half2(0,psize.y),half2(psize.x,0),half2(0,-psize.y) };
+        float2 psize = _MainLightShadowmapSize.xy * shadowSoftScale;
+        const float2 uvs[] = { float2(-psize.x,0),float2(0,psize.y),float2(psize.x,0),float2(0,-psize.y) };
 
-        half2 offset = 0;
+        float2 offset = 0;
         for(int x=0;x< SOFT_SHADOW_COUNT;x++){
             offset = uvs[x] ;
-            shadow +=SAMPLE_TEXTURE2D_SHADOW(shadowMap,sampler_ShadowMap, half3(shadowCoord.xy + offset,shadowCoord.z)) * SOFT_SHADOW_WEIGHTS[x+1];
+            shadow +=SAMPLE_TEXTURE2D_SHADOW(shadowMap,sampler_ShadowMap, float3(shadowCoord.xy + offset,shadowCoord.z)) * SOFT_SHADOW_WEIGHTS[x+1];
         }
         
         return shadow;
@@ -119,7 +119,7 @@ half4 TransformWorldToShadowCoord(half3 positionWS)
         // return _MainLightShadowOn;
     }
 
-    half MixRealtimeAndBakedShadows(half realtimeShadow, half bakedShadow, half shadowFade)
+    float MixRealtimeAndBakedShadows(float realtimeShadow, float bakedShadow, float shadowFade)
     {
     #if defined(LIGHTMAP_SHADOW_MIXING)
         return min(lerp(realtimeShadow, 1, shadowFade), bakedShadow);
@@ -128,19 +128,19 @@ half4 TransformWorldToShadowCoord(half3 positionWS)
     #endif
     }
 
-    half BakedShadow(half4 shadowMask, half4 occlusionProbeChannels)
+    float BakedShadow(float4 shadowMask, float4 occlusionProbeChannels)
     {
         // Here occlusionProbeChannels used as mask selector to select shadows in shadowMask
         // If occlusionProbeChannels all components are zero we use default baked shadow value 1.0
         // This code is optimized for mobile platforms:
-        // half bakedShadow = any(occlusionProbeChannels) ? dot(shadowMask, occlusionProbeChannels) : 1.0h;
-        half bakedShadow = half(1.0) + dot(shadowMask - half(1.0), occlusionProbeChannels);
+        // float bakedShadow = any(occlusionProbeChannels) ? dot(shadowMask, occlusionProbeChannels) : 1.0h;
+        float bakedShadow = float(1.0) + dot(shadowMask - float(1.0), occlusionProbeChannels);
         return bakedShadow;
     }
 
-    half CalcShadow (half4 shadowCoord,half3 worldPos,half4 shadowMask,bool receiveShadow,half softScale)
+    float CalcShadow (float4 shadowCoord,float3 worldPos,float4 shadowMask,bool receiveShadow,float softScale)
     {
-        half shadow = 1;
+        float shadow = 1;
 
         if(MainLightEnabled() && receiveShadow){
             //shadow = SAMPLE_TEXTURE2D_SHADOW(_MainLightShadowmapTexture,sampler_MainLightShadowmapTexture, shadowCoord.xyz);
@@ -150,13 +150,13 @@ half4 TransformWorldToShadowCoord(half3 positionWS)
 
             // baked shadow
             #if defined(CALCULATE_BAKED_SHADOWS)
-                half bakedShadow = BakedShadow(shadowMask,_MainLightOcclusionProbes);
+                float bakedShadow = BakedShadow(shadowMask,_MainLightOcclusionProbes);
             #else
-                half bakedShadow = 1;
+                float bakedShadow = 1;
             #endif
 
             // shadow fade
-            half shadowFade = GetShadowFade(worldPos); 
+            float shadowFade = GetShadowFade(worldPos); 
             // shadowFade = shadowCoord.w == 4 ? 1.0 : shadowFade;
             // mix 
             shadow = MixRealtimeAndBakedShadows(shadow,bakedShadow,shadowFade);
