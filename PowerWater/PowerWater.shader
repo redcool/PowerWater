@@ -18,7 +18,7 @@ Shader "URP/PowerWater"
         [GroupHeader(Main,PBR Mask)]
         [GroupItem(Main)]_PBRMask("_PBRMask(Metallic:R,Smoothness:G,Occlusion:B)",2d)="white"{}
         [GroupItem(Main)]_Metallic("_Metallic",range(0,1)) = 0.5
-        [GroupItem(Main)]_Smoothness("_Smoothness",range(0,1)) = 0.8
+        [GroupItem(Main)]_Smoothness("_Smoothness",range(0,1)) = 0.9
         [GroupItem(Main)]_Occlusion("_Occlusion",range(0,1)) = 0
 
         [Group(Wave)]
@@ -43,7 +43,7 @@ Shader "URP/PowerWater"
 
         [Group(Depth)]
         [GroupItem(Depth)]_Depth("_Depth",float) = -1
-        [GroupItem(Depth)]_DepthColor("_DepthColor",color) = (0,0,.7,1)
+        [GroupItem(Depth)]_DepthColor("_DepthColor",color) = (0,0.7,1,1)
         [GroupItem(Depth)]_ShallowColor("_ShallowColor",color) = (1,1,1,1)
 
         [Group(Env)]
