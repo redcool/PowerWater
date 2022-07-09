@@ -46,6 +46,7 @@
         // apply wave
         v.vertex.y += simpleNoise * _WaveStrength;
         if(_ApplyGerstnerWaveOn){
+            _WaveDir.zw += simpleNoise * .002;
             v.vertex.xyz += GerstnerWave(_WaveDir,worldPos,tangent,normal);
             simpleNoise = v.vertex.y;
         }

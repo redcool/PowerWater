@@ -3,8 +3,8 @@ Shader "URP/PowerWater"
     Properties
     {
         [Group(Fresnel Color)]
-        [GroupItem(Fresnel Color)]_Color1("_Color1",color) = (0.5,0.8,.9,1)
-        [GroupItem(Fresnel Color)]_Color2("_Color2",color) = (0.5,0.7,0.8,1)
+        [GroupItem(Fresnel Color)][hdr]_Color1("_Color1",color) = (0.5,0.8,.9,1)
+        [GroupItem(Fresnel Color)][hdr]_Color2("_Color2",color) = (0.5,0.7,0.8,1)
 
         [Group(Main)]
         [GroupItem(Main)]_MainTex ("Texture", 2D) = "white" {}
@@ -43,8 +43,8 @@ Shader "URP/PowerWater"
 
         [Group(Depth)]
         [GroupItem(Depth)]_Depth("_Depth",float) = -1.3
-        [GroupItem(Depth)]_DepthColor("_DepthColor",color) = (0,0.5,.8,1)
-        [GroupItem(Depth)]_ShallowColor("_ShallowColor",color) = (1,1,1,1)
+        [GroupItem(Depth)][hdr]_DepthColor("_DepthColor",color) = (0.5,0.7,.8,1)
+        [GroupItem(Depth)][hdr]_ShallowColor("_ShallowColor",color) = (1,1,1,1)
 
         [Group(Env)]
         [GroupHeader(Env,Refraction)]
@@ -60,12 +60,14 @@ Shader "URP/PowerWater"
         [GroupItem(FoamAndCaustics)]_FoamDepthMin("_FoamDepthMin",range(0,1)) = 0
         [GroupItem(FoamAndCaustics)]_FoamDepthMax("_FoamDepthMax",range(0,1)) = 1
         [GroupItem(FoamAndCaustics)]_FoamSpeed("_FoamSpeed",float) = 1
+        [GroupItem(FoamAndCaustics)]_FoamColor("_FoamColor",color) = (1,1,1,1)
 
         [Space(10)]
         [GroupHeader(FoamAndCaustics,Caustics)]
         [GroupItem(FoamAndCaustics)]_CausticsIntensity("_CausticsIntensity",range(0,3)) = 1
         [GroupItem(FoamAndCaustics)]_CausticsSpeed("_CausticsSpeed",float) = 1
         [GroupItem(FoamAndCaustics)]_CausticsTiling("_CausticsTiling",float) = 1
+        [GroupItem(FoamAndCaustics)]_CausticsColor("_CausticsColor",color) = (.5,.5,.5,1)
 
         [Group(SunAndEye)]
         [GroupToggle(SunAndEye)]_FixedViewOn("_FixedViewOn",int) = 0

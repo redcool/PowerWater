@@ -33,9 +33,11 @@
 
     float4 _FoamTex_ST;
     float _FoamDepthMin,_FoamDepthMax,_FoamSpeed;
+    half4 _FoamColor;
 
     float _RefractionIntensity;
     float _CausticsIntensity,_CausticsTiling,_CausticsSpeed;
+    half4 _CausticsColor;
 
     float _FixedViewOn;
     float3 _ViewPosition;
