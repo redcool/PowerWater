@@ -42,8 +42,8 @@ Shader "URP/PowerWater"
 
 
         [Group(Depth)]
-        [GroupItem(Depth)]_Depth("_Depth",float) = -1
-        [GroupItem(Depth)]_DepthColor("_DepthColor",color) = (0,0.7,1,1)
+        [GroupItem(Depth)]_Depth("_Depth",float) = -1.3
+        [GroupItem(Depth)]_DepthColor("_DepthColor",color) = (0,0.5,.8,1)
         [GroupItem(Depth)]_ShallowColor("_ShallowColor",color) = (1,1,1,1)
 
         [Group(Env)]
