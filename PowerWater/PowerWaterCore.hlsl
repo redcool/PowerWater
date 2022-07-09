@@ -42,25 +42,26 @@
         float fresnel = 1-saturate(dot(vertexNormal,viewDir));
         float3 seaColor = lerp(_Color1,_Color2,fresnel).xyz;
         // -------------------- noise depth shadow
-        seaColor *= clampNoise;
+        // seaColor *= clampNoise;
 
         float3 wpos = CalcWorldPos(screenUV);// scene world position
-        float seaDepth = saturate(wpos.y - worldPos.y - _Depth);
-
+        float seaDepth = saturate( wpos.y - worldPos.y - _Depth);
+// return seaDepth;
         // -------------------- depth and shallow color
         seaColor *= lerp(_DepthColor,_ShallowColor,seaDepth).xyz;
+        // return lerp(_DepthColor,_ShallowColor,seaDepth).xyz;
         // -------------------- caustics ,depth is 1
         float3 causticsColor = CalcFoamColor(uv,wpos,worldPos,0.5,0.3,0,blendNormal*2,clampNoise,_CausticsSpeed,_CausticsTiling);
         causticsColor *= _CausticsIntensity;
-        // seaColor += causticsColor;
-        // return causticsColor.xyzx;
+        // seaColor += causticsColor * seaDepth;
+// return seaColor;
+
         // -------------------- refraction color
-        // float refractionRate = lerp(clampNoise,0,seaDepth);
         float3 refractionColor = tex2D(_CameraOpaqueTexture,screenUV + blendNormal.xz * clampNoise * _RefractionIntensity).xyz;
-        // refractionColor += causticsColor;
         refractionColor = lerp(causticsColor,refractionColor,seaDepth);
-        // refractionColor = saturate(lerp(refractionColor,causticsColor,_CausticsIntensity));
-        seaColor = lerp(seaColor,refractionColor,seaDepth);
+// return refractionColor;
+        seaColor += refractionColor * seaDepth;
+        // seaColor = lerp(seaColor,refractionColor,seaDepth);
 
         // -------------------- foam, depth is 0.5
         float3 foamColor =  CalcFoamColor(uv,wpos,worldPos,0.5,_FoamDepthMin,_FoamDepthMax,blendNormal,clampNoise,_FoamSpeed,_FoamTex_ST.xy);

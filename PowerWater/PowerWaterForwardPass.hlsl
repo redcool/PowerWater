@@ -101,7 +101,7 @@
 // return waveCrestColor;        
         float3 seaColor = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV);
         seaColor += waveCrestColor;
-// return seaColor.xyzx;
+
         float3 emissionColor = 0;
 //-------- pbr
         
