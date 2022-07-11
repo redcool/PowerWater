@@ -60,6 +60,9 @@ Shader "URP/PowerWater"
         [GroupItem(Env)]_ReflectDirOffset("_ReflectDirOffset",vector) = (0,0,0,0)
         [GroupItem(Env)]_ReflectionIntensity("_ReflectionIntensity",range(0,2)) = 1
 
+        [GroupHeader(Env,Fog)]
+        [GroupToggle(Env)]_FogOn("_FogOn",int) = 1
+
         [Group(FoamAndCaustics)]
         [GroupItem(FoamAndCaustics)]_FoamTex("_FoamTex",2d) = ""{}
         [GroupItem(FoamAndCaustics)]_FoamDepthMin("_FoamDepthMin",range(0,1)) = 0

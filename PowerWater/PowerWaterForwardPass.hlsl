@@ -10,6 +10,7 @@
     #include "PowerWaterInput.hlsl"
     #include "PowerWaterCore.hlsl"
     #include "PowerLib/WaveLib.hlsl"
+    #include "PowerLib/FogLib.hlsl"
 
     struct appdata
     {
@@ -26,6 +27,7 @@
         float4 tSpace0:TEXCOORD1;
         float4 tSpace1:TEXCOORD2;
         float4 tSpace2:TEXCOORD3;
+        float2 fogCoord : TEXCOORD4;
     };
 
 
@@ -66,7 +68,7 @@
         o.tSpace1 = float4(t.y,b.y,n.y,worldPos.y);
         o.tSpace2 = float4(t.z,b.z,n.z,worldPos.z);
 
-
+        o.fogCoord = CalcFogFactor(worldPos);
         return o;
     }
 
@@ -140,6 +142,8 @@
 
 //---------emission
         col.xyz += emissionColor;
+//---------fog
+        BlendFogSphere(col.xyz/**/,worldPos,i.fogCoord,false,false);
         
         return saturate(col);
     }

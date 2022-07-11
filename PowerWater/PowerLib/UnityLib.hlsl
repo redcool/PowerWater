@@ -372,5 +372,15 @@ float3 UnpackNormalScale(float4 packedNormal, float bumpScale)
 #endif
 }
 
-//============================
+//==============================
+//  env paramaters ,fog
+//==============================
+half4 glstate_lightmodel_ambient;
+half4 unity_AmbientSky;
+half4 unity_AmbientEquator;
+half4 unity_AmbientGround;
+half4 unity_IndirectSpecColor;
+float4 unity_FogParams;
+half4  unity_FogColor;
+
 #endif // UNITY_LIB_HLSL

@@ -47,6 +47,7 @@
     float3 _ReflectDirOffset;
     float _ReflectionIntensity;
     float4 _ReflectionCubemap_HDR;
+    half _FogOn;
     CBUFFER_END            
 
 #endif //POWER_WATER_INPUT_HLSL
