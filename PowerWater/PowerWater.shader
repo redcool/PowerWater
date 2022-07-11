@@ -3,8 +3,8 @@ Shader "URP/PowerWater"
     Properties
     {
         [Group(Fresnel Color)]
-        [GroupItem(Fresnel Color)][hdr]_Color1("_Color1",color) = (0.5,0.8,.9,1)
-        [GroupItem(Fresnel Color)][hdr]_Color2("_Color2",color) = (0.5,0.7,0.8,1)
+        [GroupItem(Fresnel Color)][hdr]_Color1("_Color1",color) = (0,0.1,.99,1)
+        [GroupItem(Fresnel Color)][hdr]_Color2("_Color2",color) = (0,0.34,.99,1)
 
         [Group(Main)]
         [GroupItem(Main)]_MainTex ("Texture", 2D) = "white" {}
@@ -22,17 +22,22 @@ Shader "URP/PowerWater"
         [GroupItem(Main)]_Occlusion("_Occlusion",range(0,1)) = 0
 
         [Group(Wave)]
-        [GroupHeader(Wave, WaveSettings)]
+        [GroupHeader(Wave, Wave function)]
         [GroupEnum(Wave,None 0 ApplyGerstnerWave 1)]_ApplyGerstnerWaveOn("_ApplyGerstnerWaveOn",int) = 1
+        [GroupHeader(Wave,Wave( Direction Steep Length))]
         [GroupVectorSlider(Wave,DirX dirZ steep waveLen,0_1 0_1 0_1 0_10)]
         _WaveDir("_WaveDir(xy:dir)(z: steep,w:waveLength)",vector) = (1,1,0.4,5)
 
+        [GroupVectorSlider(Wave,DirXNoise dirZNoise steepNoise waveLenNoise,0_1 0_1 0_1 0_0.1)]
+        _WaveDirNoiseScale("_WaveDirNoiseScale",vector) = (0,0,0,0)
+
+        [GroupHeader(Wave,Wave Tiling)]
         [GroupVectorSlider(Wave,x z no no,0_10 0_10 0_1 0_1)]_WaveTiling("_WaveTiling",vector) = (0.1,1,0,0)
         [GroupItem(Wave)]_WaveScale("_WaveScale",range(0,1)) = 1
         [GroupItem(Wave)]_WaveSpeed("_WaveSpeed",float) = 1
         [GroupItem(Wave)]_WaveStrength("_WaveStrength",range(0,5)) = 1
 
-        [GroupHeader(Wave, Noise)]
+        [GroupHeader(Wave, Noise Size)]
         [GroupItem(Wave)]_WaveNoiseMin("_WaveNoiseMin",range(0,1)) = 0.1
         [GroupItem(Wave)]_WaveNoiseMax("_WaveNoiseMax",range(0,1)) = 1
 

@@ -27,6 +27,7 @@
     float _ApplyGerstnerWaveOn;
     float2 _WaveTiling;
     float4 _WaveDir;
+    float4 _WaveDirNoiseScale;
     float _WaveScale,_WaveSpeed,_WaveStrength;
     float _WaveCrestMax,_WaveCrestMin;
     float _WaveNoiseMin,_WaveNoiseMax;
