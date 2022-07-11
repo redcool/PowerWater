@@ -143,7 +143,7 @@
 //---------emission
         col.xyz += emissionColor;
 //---------fog
-        BlendFogSphere(col.xyz/**/,worldPos,i.fogCoord,false,false);
+        BlendFogSphere(col.xyz/**/,worldPos,i.fogCoord,true,false);
         
         return saturate(col);
     }
