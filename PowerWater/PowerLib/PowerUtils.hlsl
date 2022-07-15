@@ -4,7 +4,7 @@
 
 #if !defined(POWER_UTILS_HLSL)
 #define POWER_UTILS_HLSL
-
+// #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
 // Linearize depth value sampled from the camera depth texture.
 float LinearizeDepth(float z)
 {
@@ -21,6 +21,10 @@ unity_MatrixInvVP
 float3 ScreenToWorldPos(float2 uv,float rawDepth,float4x4 invVP){
     #if defined(UNITY_UV_STARTS_AT_TOP)
         uv.y = 1-uv.y;
+    #endif
+
+    #if ! defined(UNITY_REVERSED_Z)
+        rawDepth = lerp(UNITY_NEAR_CLIP_VALUE, 1, rawDepth);
     #endif
 
     float4 p = float4(uv*2-1,rawDepth,1);

@@ -6,9 +6,6 @@
     }
     float3 CalcWorldPosFromDepth(float2 screenUV){
         float depth = tex2D(_CameraDepthTexture,screenUV).x;
-        #if ! defined(UNITY_REVERSED_Z)
-            depth = lerp(UNITY_NEAR_CLIP_VALUE, 1, depth);
-        #endif
 
         float3 wpos = ScreenToWorldPos(screenUV,depth,unity_MatrixInvVP);
         return wpos;
