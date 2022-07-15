@@ -4,8 +4,12 @@
         float2 uv = posXZ* tiling + dir * speed *_Time.x;
         return uv ;
     }
-    float3 CalcWorldPos(float2 screenUV){
+    float3 CalcWorldPosFromDepth(float2 screenUV){
         float depth = tex2D(_CameraDepthTexture,screenUV).x;
+        #if ! defined(UNITY_REVERSED_Z)
+            depth = lerp(UNITY_NEAR_CLIP_VALUE, 1, depth);
+        #endif
+
         float3 wpos = ScreenToWorldPos(screenUV,depth,unity_MatrixInvVP);
         return wpos;
     }
@@ -45,7 +49,7 @@
         // -------------------- noise depth shadow
         seaColor *= clampNoise;
 // return seaColor;
-        float3 wpos = CalcWorldPos(screenUV);// scene world position
+        float3 wpos = CalcWorldPosFromDepth(screenUV);// scene world position
         float seaDepth = saturate( wpos.y - worldPos.y - _Depth);
 // return seaDepth;
         // -------------------- depth and shallow color

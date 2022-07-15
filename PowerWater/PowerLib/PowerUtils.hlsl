@@ -19,9 +19,9 @@ screenUV -> ndc -> clip -> view
 unity_MatrixInvVP
 */
 float3 ScreenToWorldPos(float2 uv,float rawDepth,float4x4 invVP){
-    // #if defined(UNITY_UV_STARTS_AT_TOP)
+    #if defined(UNITY_UV_STARTS_AT_TOP)
         uv.y = 1-uv.y;
-    // #endif
+    #endif
 
     float4 p = float4(uv*2-1,rawDepth,1);
 

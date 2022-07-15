@@ -80,7 +80,6 @@
         float clampNoise = clamp(simpleNoise,0.3,1);
 // return clampNoise;
         float2 screenUV =  i.vertex.xy /_ScreenParams.xy;
-
         float3 worldPos = float3(i.tSpace0.w,i.tSpace1.w,i.tSpace2.w);
         float3 vertexTangent = (float3(i.tSpace0.x,i.tSpace1.x,i.tSpace2.x));
         float3 vertexBinormal = normalize(float3(i.tSpace0.y,i.tSpace1.y,i.tSpace2.y));
