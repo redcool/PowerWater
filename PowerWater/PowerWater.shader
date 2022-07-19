@@ -65,8 +65,15 @@ Shader "URP/PowerWater"
 
         [Group(FoamAndCaustics)]
         [GroupItem(FoamAndCaustics)]_FoamTex("_FoamTex",2d) = ""{}
-        [GroupItem(FoamAndCaustics)]_FoamDepthMin("_FoamDepthMin",range(0,1)) = 0
-        [GroupItem(FoamAndCaustics)]_FoamDepthMax("_FoamDepthMax",range(0,1)) = 1
+
+        [GroupHeader(FoamAndCaustics,SeaSide Depth)]
+        [GroupItem(Depth)]_SeaSideDepth("_SeaSideDepth",range(0,-0.21)) = -0.1
+
+        [Space(10)]
+        [GroupHeader(FoamAndCaustics,Foam)]
+        [GroupItem(FoamAndCaustics)]
+        // [GroupVectorSlider(FoamAndCaustics,FoamDepth depthMin depthMax no,0_1 0_1 0_1 0_1)]
+        _FoamDepth("_FoamDepth(x:depth,yz:(Depth range))",vector) = (-0.13,0,0.15,0)
         [GroupItem(FoamAndCaustics)]_FoamSpeed("_FoamSpeed",float) = 1
         [GroupItem(FoamAndCaustics)]_FoamColor("_FoamColor",color) = (1,1,1,1)
 
@@ -76,6 +83,7 @@ Shader "URP/PowerWater"
         [GroupItem(FoamAndCaustics)]_CausticsSpeed("_CausticsSpeed",float) = 1
         [GroupItem(FoamAndCaustics)]_CausticsTiling("_CausticsTiling",float) = 1
         [GroupItem(FoamAndCaustics)]_CausticsColor("_CausticsColor",color) = (.5,.5,.5,1)
+        [GroupItem(FoamAndCaustics)]_CausticsDepth("_CausticsDepth(x:Depth,yz:(Depth range))",vector) = (-0.37,0,1,0)
 
         [Group(SunAndEye)]
         [GroupToggle(SunAndEye)]_FixedViewOn("_FixedViewOn",int) = 0

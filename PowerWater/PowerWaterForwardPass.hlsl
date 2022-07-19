@@ -101,10 +101,12 @@
         float nv = saturate(dot(n,v));
 // calc sea color
         float waveCrestColor = smoothstep(_WaveCrestMin,_WaveCrestMax,simpleNoise);
-// return waveCrestColor;        
+// return waveCrestColor; 
+        // float4 seaColorDepth = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV);
         float3 seaColor = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV);
         seaColor += waveCrestColor;
-
+        // float seaDepth = seaColorDepth.w;
+return seaColor.xyzx;
         float3 emissionColor = 0;
 //-------- pbr
         
@@ -123,7 +125,6 @@
         float4 mainTex = tex2D(_MainTex, mainUV);
         float3 albedo = mainTex.xyz * seaColor;
         float alpha = mainTex.w;
-
         float3 diffColor = albedo * (1-metallic);
         float3 specColor = lerp(0.04,albedo,metallic);
 		float3 giDiff = CalcGIDiff(n,diffColor);
@@ -134,10 +135,10 @@
 
         Light mainLight = GetMainLight();
         col.xyz += CalcLight(mainLight,diffColor,specColor,n,v,a,a2);
-
 		#if defined(_ADDITIONAL_LIGHTS)
 			col.xyz += CalcAdditionalLights(worldPos,diffColor,specColor,n,v,a,a2,0,0,0);
 		#endif
+// return CalcAdditionalLights(worldPos,diffColor,specColor,n,v,a,a2,0,0,0).xyzx;
 
 //---------emission
         col.xyz += emissionColor;

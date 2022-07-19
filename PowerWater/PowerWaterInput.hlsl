@@ -18,6 +18,7 @@
 
     float _Depth;
     float4 _DepthColor,_ShallowColor;
+    float _SeaSideDepth;
 
     float _NormalScale;
     // float4 _NormalMap_ST;
@@ -33,12 +34,14 @@
     float _WaveNoiseMin,_WaveNoiseMax;
 
     float4 _FoamTex_ST;
-    float _FoamDepthMin,_FoamDepthMax,_FoamSpeed;
+    half4 _FoamDepth;
+    float _FoamSpeed;
     half4 _FoamColor;
 
     float _RefractionIntensity;
     float _CausticsIntensity,_CausticsTiling,_CausticsSpeed;
     half4 _CausticsColor;
+    half4 _CausticsDepth;
 
     float _FixedViewOn;
     float3 _ViewPosition;
