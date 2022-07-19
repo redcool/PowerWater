@@ -103,7 +103,9 @@
         float waveCrestColor = smoothstep(_WaveCrestMin,_WaveCrestMax,simpleNoise);
 // return waveCrestColor; 
         // float4 seaColorDepth = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV);
-        float3 seaColor = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV);
+        float seaSideDepth;
+        float3 seaBedColor;
+        float3 seaColor = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV,seaSideDepth/**/,seaBedColor/**/);
         seaColor += waveCrestColor;
         // float seaDepth = seaColorDepth.w;
 // return seaColor.xyzx;
@@ -144,7 +146,9 @@
         col.xyz += emissionColor;
 //---------fog
         BlendFogSphere(col.xyz/**/,worldPos,i.fogCoord,true,false);
+//--------- blend (sea bed, col)
+        col.xyz = lerp(seaBedColor,col,1-seaSideDepth);
         
-        return saturate(col);
+        return col;
     }
 #endif //POWER_WATER_FORWARD_PASS_HLSL

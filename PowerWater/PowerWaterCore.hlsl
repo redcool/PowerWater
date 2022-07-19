@@ -41,7 +41,9 @@
     }
     
 
-    float3 CalcSeaColor(float2 screenUV,float3 worldPos,float3 vertexNormal,float3 viewDir,float clampNoise,float3 blendNormal,float2 uv){
+    float3 CalcSeaColor(float2 screenUV,float3 worldPos,float3 vertexNormal,float3 viewDir,float clampNoise,
+        float3 blendNormal,float2 uv,out float seaSideDepth/**/,out float3 seaBedColor/**/
+    ){
         // -------------------- fresnel color
         half nv  = saturate(dot(vertexNormal,viewDir));
         float fresnel = 1- nv*nv;
@@ -62,12 +64,12 @@
         causticsColor *= _CausticsIntensity * _CausticsColor * causticsDepth;
 // return causticsColor;
 
-        float seaSideDepth =  CalcDepth(bedPos,worldPos,float3(_SeaSideDepth,0,0.1));
+        seaSideDepth =  CalcDepth(bedPos,worldPos,float3(_SeaSideDepth,0,0.1));
         // return seaSideDepth;
 
         // -------------------- refraction color
         float refractionIntensity = _RefractionIntensity * (1-seaSideDepth);
-        float3 seaBedColor = tex2D(_CameraOpaqueTexture,screenUV + blendNormal.xz * clampNoise * refractionIntensity).xyz;
+        seaBedColor = tex2D(_CameraOpaqueTexture,screenUV + blendNormal.xz * clampNoise * refractionIntensity).xyz;
         float3 refractionColor = lerp(causticsColor,seaBedColor,seaDepth);
 // return refractionColor ;
         seaColor += refractionColor;
