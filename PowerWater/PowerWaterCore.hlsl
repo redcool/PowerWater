@@ -70,7 +70,7 @@
         float3 seaBedColor = tex2D(_CameraOpaqueTexture,screenUV + blendNormal.xz * clampNoise * refractionIntensity).xyz;
         float3 refractionColor = lerp(causticsColor,seaBedColor,seaDepth);
 // return refractionColor ;
-        seaColor += refractionColor * seaDepth;
+        seaColor += refractionColor;
 // return seaColor;
 
         // -------------------- foam, depth is 0.5
