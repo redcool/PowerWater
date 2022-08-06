@@ -1,16 +1,16 @@
 #if !defined(POWER_WATER_FORWARD_PASS_HLSL)
 #define POWER_WATER_FORWARD_PASS_HLSL
-    #include "PowerLib/UnityLib.hlsl"
-    #include "PowerLib/PowerUtils.hlsl"
-    #include "PowerLib/NodeLib.hlsl"
-	#include "PowerLib/URPLib/Lighting.hlsl"
+    #include "../../PowerShaderLib/Lib/UnityLib.hlsl"
+    #include "../../PowerShaderLib/Lib/PowerUtils.hlsl"
+    #include "../../PowerShaderLib/Lib/NodeLib.hlsl"
+    #include "../../PowerShaderLib/URPLib/Lighting.hlsl"
 
 
 
     #include "PowerWaterInput.hlsl"
     #include "PowerWaterCore.hlsl"
-    #include "PowerLib/WaveLib.hlsl"
-    #include "PowerLib/FogLib.hlsl"
+    #include "../../PowerShaderLib/Lib/WaveLib.hlsl"
+    #include "../../PowerShaderLib/Lib/FogLib.hlsl"
 
     struct appdata
     {
