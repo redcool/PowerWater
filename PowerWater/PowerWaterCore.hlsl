@@ -44,6 +44,8 @@
     float3 CalcSeaColor(float2 screenUV,float3 worldPos,float3 vertexNormal,float3 viewDir,float clampNoise,
         float3 blendNormal,float2 uv,out float seaSideDepth/**/,out float3 seaBedColor/**/
     ){
+        seaSideDepth = 0;
+        seaBedColor = 0;
         // -------------------- fresnel color
         half nv  = saturate(dot(vertexNormal,viewDir));
         float fresnel = 1- nv*nv;
