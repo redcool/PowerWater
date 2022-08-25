@@ -32,7 +32,7 @@ Shader "URP/PowerWater"
         _WaveDirNoiseScale("_WaveDirNoiseScale",vector) = (0,0,0,0)
 
         [GroupHeader(Wave,Wave Tiling)]
-        [GroupVectorSlider(Wave,x z no no,0_10 0_10 0_1 0_1)]_WaveTiling("_WaveTiling",vector) = (0.1,1,0,0)
+        [GroupVectorSlider(Wave,x z ,0_10 0_10)]_WaveTiling("_WaveTiling",vector) = (0.1,1,0,0)
         [GroupItem(Wave)]_WaveScale("_WaveScale",range(0,1)) = 1
         [GroupItem(Wave)]_WaveSpeed("_WaveSpeed",float) = 1
         [GroupItem(Wave)]_WaveStrength("_WaveStrength",range(0,5)) = 1
@@ -67,7 +67,7 @@ Shader "URP/PowerWater"
         [GroupItem(FoamAndCaustics)]_FoamTex("_FoamTex",2d) = ""{}
 
         [GroupHeader(FoamAndCaustics,SeaSide Depth)]
-        [GroupItem(Depth)]_SeaSideDepth("_SeaSideDepth",range(0,-0.21)) = -0.1
+        [GroupItem(FoamAndCaustics)]_SeaSideDepth("_SeaSideDepth",range(0,-0.21)) = -0.1
 
         [Space(10)]
         [GroupHeader(FoamAndCaustics,Foam)]
