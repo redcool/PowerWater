@@ -133,7 +133,8 @@
         Light mainLight = GetMainLight();
         col.xyz += CalcLight(mainLight,diffColor,specColor,n,v,a,a2);
         #if defined(_ADDITIONAL_LIGHTS)
-                col.xyz += CalcAdditionalLights(worldPos,diffColor,specColor,n,v,a,a2,0,0,0);
+            float4 shadowMask = 0;
+            col.xyz += CalcAdditionalLights(worldPos,diffColor,specColor,n,v,a,a2,shadowMask);
         #endif
 
 //---------emission
