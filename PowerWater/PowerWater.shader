@@ -23,7 +23,7 @@ Shader "URP/PowerWater"
 
         [Group(Wave)]
         [GroupHeader(Wave, Wave function)]
-        [GroupEnum(Wave,None 0 ApplyGerstnerWave 1)]_ApplyGerstnerWaveOn("_ApplyGerstnerWaveOn",int) = 1
+        [GroupEnum(Wave,None _GERSTNER_WAVE_ON,true)]_ApplyGerstnerWaveOn("_ApplyGerstnerWaveOn",int) = 1
         [GroupHeader(Wave,Wave( Direction Steep Length))]
         [GroupVectorSlider(Wave,DirX dirZ steep waveLen,0_1 0_1 0_1 0_10)]
         _WaveDir("_WaveDir(xy:dir)(z: steep,w:waveLength)",vector) = (1,1,0.4,5)
@@ -97,6 +97,8 @@ Shader "URP/PowerWater"
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+
+            #pragma shader_feature_vertex _GERSTNER_WAVE_ON
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
             #pragma multi_compile_fragment _ _ADDITIONAL_LIGHTS

@@ -47,12 +47,15 @@
 
         // apply wave
         worldPos.y += simpleNoise * _WaveStrength;
-        if(_ApplyGerstnerWaveOn){
+        // if(_ApplyGerstnerWaveOn)
+        #if defined(_GERSTNER_WAVE_ON)
+        {
             _WaveDir += _WaveDirNoiseScale * simpleNoise;
             // _WaveDir.zw += float2(.1,0.0001) * simpleNoise;
             worldPos += GerstnerWave(_WaveDir,worldPos,tangent,normal);
             simpleNoise = worldPos.y;
         }
+        #endif
 
         o.vertex = TransformWorldToHClip(worldPos);
 
