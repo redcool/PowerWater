@@ -128,7 +128,7 @@
         float3 diffColor = albedo * (1-metallic);
         float3 specColor = lerp(0.04,albedo,metallic);
         float3 giDiff = CalcGIDiff(n,diffColor);
-        float3 giSpec = CalcGISpec(_ReflectionCubemap,sampler_ReflectionCubemap,_ReflectionCubemap_HDR,specColor,n,v,_ReflectDirOffset,_ReflectionIntensity,nv,roughness,a2,smoothness,metallic);
+        float3 giSpec = CalcGISpec(_ReflectionCubemap,sampler_ReflectionCubemap,_ReflectionCubemap_HDR,specColor,worldPos,n,v,_ReflectDirOffset,_ReflectionIntensity,nv,roughness,a2,smoothness,metallic);
 
         float4 col = 0;
         col.xyz = (giDiff + giSpec) * occlusion;
