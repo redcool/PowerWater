@@ -88,12 +88,41 @@ Shader "URP/PowerWater"
         [Group(SunAndEye)]
         [GroupToggle(SunAndEye)]_FixedViewOn("_FixedViewOn",int) = 0
         [GroupItem(SunAndEye)]_ViewPosition("_ViewPosition",vector) = (10,-10,10)
+
+        [Group(Alpha)]
+        [GroupHeader(Alpha,BlendMode)]
+        [GroupPresetBlendMode(Alpha,,_SrcMode,_DstMode)]_PresetBlendMode("_PresetBlendMode",int)=0
+        // [GroupEnum(Alpha,UnityEngine.Rendering.BlendMode)]
+        [HideInInspector]_SrcMode("_SrcMode",int) = 1
+        [HideInInspector]_DstMode("_DstMode",int) = 0
+
+        // [GroupHeader(Alpha,Premultiply)]
+        // [GroupToggle(Alpha)]_AlphaPremultiply("_AlphaPremultiply",int) = 0
+
+        [GroupHeader(Alpha,AlphaTest)]
+        [GroupToggle(Alpha,ALPHA_TEST)]_AlphaTestOn("_AlphaTestOn",int) = 0
+        [GroupSlider(Alpha)]_Cutoff("_Cutoff",range(0,1)) = 0.5
+
+        [Group(Settings)]
+        [GroupEnum(Settings,UnityEngine.Rendering.CullMode)]_CullMode("_CullMode",int) = 2
+		[GroupToggle(Settings)]_ZWriteMode("ZWriteMode",int) = 0
+		/*
+		Disabled,Never,Less,Equal,LessEqual,Greater,NotEqual,GreaterEqual,Always
+		*/
+		[GroupEnum(Settings,UnityEngine.Rendering.CompareFunction)]_ZTestMode("_ZTestMode",float) = 4  
     }
     SubShader
     {
         Tags{"Queue"="Transparent"}
         Pass
         {
+			ZWrite[_ZWriteMode]
+			Blend [_SrcMode][_DstMode]
+			// BlendOp[_BlendOp]
+			Cull[_CullMode]
+			ztest[_ZTestMode]
+			// ColorMask [_ColorMask]
+
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
