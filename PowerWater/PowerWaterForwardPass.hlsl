@@ -147,6 +147,6 @@
 //--------- blend (sea bed, col)
         col.xyz = lerp(seaBedColor,col,1-seaSideDepth);
         
-        return col;
+        return half4(col.xyz,alpha);
     }
 #endif //POWER_WATER_FORWARD_PASS_HLSL
