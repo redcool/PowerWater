@@ -2,6 +2,7 @@ Shader "URP/PowerWater"
 {
     Properties
     {
+        [GroupHeader(v(0.0.2))]
         [Group(Fresnel Color)]
         [GroupItem(Fresnel Color)][hdr]_Color1("_Color1",color) = (0,0.1,.99,1)
         [GroupItem(Fresnel Color)][hdr]_Color2("_Color2",color) = (0,0.34,.99,1)
@@ -64,6 +65,7 @@ Shader "URP/PowerWater"
         [GroupToggle(Env)]_FogOn("_FogOn",int) = 1
 
         [Group(FoamAndCaustics)]
+        [GroupEnum(FoamAndCaustics,_SEA_FULL SEA_SIMPLE SEA_FOAM,true)]_FoamMode("_FoamMode",int) = 0
         [GroupItem(FoamAndCaustics)]_FoamTex("_FoamTex",2d) = ""{}
 
         [GroupHeader(FoamAndCaustics,SeaSide Depth)]
@@ -72,18 +74,22 @@ Shader "URP/PowerWater"
         [Space(10)]
         [GroupHeader(FoamAndCaustics,Foam)]
         [GroupItem(FoamAndCaustics)]
-        // [GroupVectorSlider(FoamAndCaustics,FoamDepth depthMin depthMax no,0_1 0_1 0_1 0_1)]
+        
+        [GroupVectorSlider(FoamAndCaustics,FoamDepth depthMin depthMax ,0_1 0_1 0_1 ,,field float float )]
         _FoamDepth("_FoamDepth(x:depth,yz:(Depth range))",vector) = (-0.13,0,0.15,0)
+
         [GroupItem(FoamAndCaustics)]_FoamSpeed("_FoamSpeed",float) = 1
         [GroupItem(FoamAndCaustics)]_FoamColor("_FoamColor",color) = (1,1,1,1)
 
-        [Space(10)]
+        // [Space(10)]
         [GroupHeader(FoamAndCaustics,Caustics)]
         [GroupItem(FoamAndCaustics)]_CausticsIntensity("_CausticsIntensity",range(0,3)) = 1
         [GroupItem(FoamAndCaustics)]_CausticsSpeed("_CausticsSpeed",float) = 1
         [GroupItem(FoamAndCaustics)]_CausticsTiling("_CausticsTiling",float) = 1
         [GroupItem(FoamAndCaustics)]_CausticsColor("_CausticsColor",color) = (.5,.5,.5,1)
-        [GroupItem(FoamAndCaustics)]_CausticsDepth("_CausticsDepth(x:Depth,yz:(Depth range))",vector) = (-0.37,0,1,0)
+
+        [GroupVectorSlider(FoamAndCaustics,Depth depthMin depthMax,0_1 0_1 0_1,,field float float)]
+        _CausticsDepth("_CausticsDepth(x:Depth,yz:(Depth range))",vector) = (-0.37,0,1,0)
 
         [Group(SunAndEye)]
         [GroupToggle(SunAndEye)]_FixedViewOn("_FixedViewOn",int) = 0
@@ -99,9 +105,9 @@ Shader "URP/PowerWater"
         // [GroupHeader(Alpha,Premultiply)]
         // [GroupToggle(Alpha)]_AlphaPremultiply("_AlphaPremultiply",int) = 0
 
-        [GroupHeader(Alpha,AlphaTest)]
-        [GroupToggle(Alpha,ALPHA_TEST)]_AlphaTestOn("_AlphaTestOn",int) = 0
-        [GroupSlider(Alpha)]_Cutoff("_Cutoff",range(0,1)) = 0.5
+        // [GroupHeader(Alpha,AlphaTest)]
+        // [GroupToggle(Alpha,ALPHA_TEST)]_AlphaTestOn("_AlphaTestOn",int) = 0
+        // [GroupSlider(Alpha)]_Cutoff("_Cutoff",range(0,1)) = 0.5
 
         [Group(Settings)]
         [GroupEnum(Settings,UnityEngine.Rendering.CullMode)]_CullMode("_CullMode",int) = 2
@@ -131,6 +137,9 @@ Shader "URP/PowerWater"
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
             #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
             #pragma multi_compile_fragment _ _ADDITIONAL_LIGHTS
+
+            // #pragma shader_feature_fragment ALPHA_TEST
+            #pragma shader_feature_fragment _SEA_FULL SEA_SIMPLE SEA_FOAM
 
             // #define _REFLECTION_PROBE_BLENDING
             // #define _REFLECTION_PROBE_BOX_PROJECTION

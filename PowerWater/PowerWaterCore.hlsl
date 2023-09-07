@@ -52,22 +52,33 @@
         float3 seaColor = lerp(_Color1,_Color2,fresnel).xyz;
         // -------------------- noise depth shadow
         seaColor *= clampNoise;
-// return seaColor;
+#if SEA_SIMPLE
+return seaColor;
+#endif
+
         float3 bedPos = CalcWorldPosFromDepth(screenUV);// scene world position
         float seaDepth = CalcDepth(bedPos,worldPos,float3(_Depth,0,.5));
 // return seaDepth;
+        seaSideDepth =  CalcDepth(bedPos,worldPos,float3(_SeaSideDepth,0,0.1));
+// return seaSideDepth;
+
         // -------------------- depth and shallow color
         seaColor *= lerp(_DepthColor,_ShallowColor,seaDepth).xyz;
 // return seaColor;
-
+        // -------------------- foam, depth is 0.5
+        float foamDepth = CalcDepth(bedPos,worldPos,_FoamDepth);
+// return foamDepth;
+        float3 foamColor = CalcFoamColor(uv,blendNormal,clampNoise,_FoamSpeed,_FoamTex_ST.xy);
+        seaColor += foamColor.xyz * _FoamColor * foamDepth;
+#if SEA_FOAM
+return seaColor;
+#endif
         // -------------------- caustics ,depth is 1
         float causticsDepth = CalcDepth(bedPos,worldPos,_CausticsDepth);
+
         float3 causticsColor = CalcFoamColor(uv,blendNormal*2,clampNoise,_CausticsSpeed,_CausticsTiling);
         causticsColor *= _CausticsIntensity * _CausticsColor * causticsDepth;
 // return causticsColor;
-
-        seaSideDepth =  CalcDepth(bedPos,worldPos,float3(_SeaSideDepth,0,0.1));
-        // return seaSideDepth;
 
         // -------------------- refraction color
         float refractionIntensity = _RefractionIntensity * (1-seaSideDepth);
@@ -77,11 +88,7 @@
         seaColor += refractionColor;
 // return seaColor;
 
-        // -------------------- foam, depth is 0.5
-        float foamDepth = CalcDepth(bedPos,worldPos,_FoamDepth);
-// return foamDepth;
-        float3 foamColor = CalcFoamColor(uv,blendNormal,clampNoise,_FoamSpeed,_FoamTex_ST.xy);
-        seaColor += foamColor.xyz * _FoamColor * foamDepth;
+
 
         return lerp(seaColor,seaBedColor,seaSideDepth);
     }
