@@ -52,9 +52,9 @@
         {
             half4 noiseScale = _WaveDirNoiseScale * (simpleNoise) + 0.00001;
             half4 noiseScaleSpeed = _WaveDirNoiseSpeed * (_Time.x*0.001);
-            half4 waveDir = _WaveDir + noiseScale + noiseScaleSpeed;
+            half4 waveDir = _WaveDir + noiseScale ;
             worldPos += GerstnerWave(tangent/**/,normal/**/,waveDir,worldPos,_WaveScrollSpeed);
-            simpleNoise = worldPos.y;
+            // simpleNoise = worldPos.y;
         }
         #endif
 
@@ -100,8 +100,9 @@
 
         float nv = saturate(dot(n,v));
 // calc sea color
-        float waveCrestColor = smoothstep(_WaveCrestMin,_WaveCrestMax,simpleNoise);
-// return waveCrestColor; 
+        half crestHeight = worldPos.y - _WaveCrestHeight;
+        float waveCrestColor = smoothstep(_WaveCrestMin,_WaveCrestMax,crestHeight);
+// return crestHeight; 
         // float4 seaColorDepth = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV);
         float seaSideDepth;
         float3 seaBedColor;

@@ -33,8 +33,8 @@ Shader "URP/PowerWater"
         [GroupVectorSlider(Wave,dirXNoise dirZNoise steepNoise waveLenNoise,0_1 0_1 0_1 0_0.1,gerstner use,field)]
         _WaveDirNoiseScale("_WaveDirNoiseScale (gerstner only)",vector) = (0,0,0,0)
 
-        [GroupVectorSlider(Wave,dirXNoiseSpeed dirZNoiseSpeed steepNoiseSpeed waveLenNoiseSpeed,0_1 0_1 0_1 0_0.1,gerstner use,field)]
-        _WaveDirNoiseSpeed("_WaveDirNoiseSpeed (gerstner only)",vector) = (0,0,0,0)
+        // [GroupVectorSlider(Wave,dirXNoiseSpeed dirZNoiseSpeed steepNoiseSpeed waveLenNoiseSpeed,0_1 0_1 0_1 0_0.1,gerstner use,field)]
+        // _WaveDirNoiseSpeed("_WaveDirNoiseSpeed (gerstner only)",vector) = (0,0,0,0)
 
         [GroupItem(Wave,more big more quick)]_WaveScrollSpeed("_WaveScrollSpeed (gerstner only)",float) = 1
 
@@ -49,6 +49,7 @@ Shader "URP/PowerWater"
         [GroupItem(Wave)]_WaveNoiseMax("_WaveNoiseMax",range(0,1)) = 1
 
         [GroupHeader(Wave ,Crest Color Range)]
+        [GroupItem(Wave)]_WaveCrestHeight("_WaveCrestHeight",float) = 1
         [GroupItem(Wave)]_WaveCrestMin("_WaveCrestMin",range(0,1)) = 0.3
         [GroupItem(Wave)]_WaveCrestMax("_WaveCrestMax",range(0,1)) = 1
 

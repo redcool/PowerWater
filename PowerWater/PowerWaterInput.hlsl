@@ -32,7 +32,7 @@
     half4 _WaveDir;
     half4 _WaveDirNoiseScale,_WaveDirNoiseSpeed;
     half _WaveScale,_WaveSpeed,_WaveStrength;
-    half _WaveCrestMax,_WaveCrestMin;
+    half _WaveCrestMax,_WaveCrestMin,_WaveCrestHeight;
     half _WaveNoiseMin,_WaveNoiseMax;
 
     half4 _FoamTex_ST;
