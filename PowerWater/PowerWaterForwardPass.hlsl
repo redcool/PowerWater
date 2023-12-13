@@ -38,7 +38,7 @@
         float3 worldPos = TransformObjectToWorld(v.vertex.xyz);
         float2 noiseUV = CalcOffsetTiling(worldPos.xz * _WaveTiling.xy,_WaveDir.xy,_WaveSpeed,1);
         float simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale) ;
-        // simpleNoise = (simpleNoise -0.5)*2;
+        // simpleNoise = simpleNoise * 2 - 1;
         simpleNoise = smoothstep(_WaveNoiseMin,_WaveNoiseMax,simpleNoise);
 
 
@@ -50,16 +50,17 @@
         // if(_ApplyGerstnerWaveOn)
         #if defined(_GERSTNER_WAVE_ON)
         {
-            _WaveDir += _WaveDirNoiseScale * simpleNoise;
-            // _WaveDir.zw += float2(.1,0.0001) * simpleNoise;
-            worldPos += GerstnerWave(_WaveDir,worldPos,tangent,normal);
+            half4 noiseScale = _WaveDirNoiseScale * (simpleNoise) + 0.00001;
+            half4 noiseScaleSpeed = _WaveDirNoiseSpeed * (_Time.x*0.001);
+            half4 waveDir = _WaveDir + noiseScale + noiseScaleSpeed;
+            worldPos += GerstnerWave(tangent/**/,normal/**/,waveDir,worldPos,_WaveScrollSpeed);
             simpleNoise = worldPos.y;
         }
         #endif
 
         o.vertex = TransformWorldToHClip(worldPos);
 
-        o.uvNoise.xy = v.uv;
+        o.uvNoise.xy = worldPos.xz * _MainTex_ST.xy + _MainTex_ST.zw;
         o.uvNoise.z = simpleNoise;
 
 

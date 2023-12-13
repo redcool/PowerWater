@@ -12,44 +12,46 @@
 
     
     CBUFFER_START(UnityPerMaterial)
-    float _Smoothness;
-    float _Metallic;
-    float _Occlusion;
+    half _Smoothness;
+    half _Metallic;
+    half _Occlusion;
 
-    float _Depth;
-    float4 _DepthColor,_ShallowColor;
-    float _SeaSideDepth;
+    half _Depth;
+    half4 _DepthColor,_ShallowColor;
+    half _SeaSideDepth;
 
-    float _NormalScale;
-    // float4 _NormalMap_ST;
-    float _NormalSpeed,_NormalTiling;
-    float4 _Color2,_Color1;
+    half _NormalScale;
+    // half4 _NormalMap_ST;
+    half _NormalSpeed,_NormalTiling;
+    half4 _Color2,_Color1;
+    half4 _MainTex_ST;
 
-    float _ApplyGerstnerWaveOn;
-    float2 _WaveTiling;
-    float4 _WaveDir;
-    float4 _WaveDirNoiseScale;
-    float _WaveScale,_WaveSpeed,_WaveStrength;
-    float _WaveCrestMax,_WaveCrestMin;
-    float _WaveNoiseMin,_WaveNoiseMax;
+    half _ApplyGerstnerWaveOn;
+    half _WaveScrollSpeed;
+    half2 _WaveTiling;
+    half4 _WaveDir;
+    half4 _WaveDirNoiseScale,_WaveDirNoiseSpeed;
+    half _WaveScale,_WaveSpeed,_WaveStrength;
+    half _WaveCrestMax,_WaveCrestMin;
+    half _WaveNoiseMin,_WaveNoiseMax;
 
-    float4 _FoamTex_ST;
+    half4 _FoamTex_ST;
     half4 _FoamDepth;
-    float _FoamSpeed;
+    half _FoamSpeed;
     half4 _FoamColor;
 
-    float _RefractionIntensity;
-    float _CausticsIntensity,_CausticsTiling,_CausticsSpeed;
+    half _RefractionIntensity;
+    half _CausticsIntensity,_CausticsTiling,_CausticsSpeed;
     half4 _CausticsColor;
     half4 _CausticsDepth;
 
-    float _FixedViewOn;
-    float3 _ViewPosition;
+    half _FixedViewOn;
+    half3 _ViewPosition;
 
 
-    float3 _ReflectDirOffset;
-    float _ReflectionIntensity;
-    float4 _ReflectionCubemap_HDR;
+    half3 _ReflectDirOffset;
+    half _ReflectionIntensity;
+    half4 _ReflectionCubemap_HDR;
     half _FogOn;
     CBUFFER_END            
 

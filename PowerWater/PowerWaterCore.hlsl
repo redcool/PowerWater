@@ -1,7 +1,7 @@
 #if !defined(POWER_WATER_CORE_HLSL)
 #define POWER_WATER_CORE_HLSL
     float2 CalcOffsetTiling(float2 posXZ,float2 dir,float speed,float tiling){
-        float2 uv = posXZ* tiling + dir * speed *_Time.x;
+        float2 uv = posXZ* tiling + dir * (speed *_Time.x);
         return uv ;
     }
     float3 CalcWorldPosFromDepth(float2 screenUV){

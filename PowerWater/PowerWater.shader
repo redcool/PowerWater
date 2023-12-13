@@ -2,7 +2,7 @@ Shader "URP/PowerWater"
 {
     Properties
     {
-        [GroupHeader(v(0.0.2))]
+        [GroupHeader(v(0.0.3))]
         [Group(Fresnel Color)]
         [GroupItem(Fresnel Color)][hdr]_Color1("_Color1",color) = (0,0.1,.99,1)
         [GroupItem(Fresnel Color)][hdr]_Color2("_Color2",color) = (0,0.34,.99,1)
@@ -21,32 +21,38 @@ Shader "URP/PowerWater"
         [GroupItem(Main)]_Metallic("_Metallic",range(0,1)) = 0.5
         [GroupItem(Main)]_Smoothness("_Smoothness",range(0,1)) = 0.9
         [GroupItem(Main)]_Occlusion("_Occlusion",range(0,1)) = 0
-
+//------------ Wave 
         [Group(Wave)]
         [GroupHeader(Wave, Wave function)]
-        [GroupEnum(Wave,None _GERSTNER_WAVE_ON,true)]_ApplyGerstnerWaveOn("_ApplyGerstnerWaveOn",int) = 1
-        [GroupHeader(Wave,Wave( Direction Steep Length))]
-        [GroupVectorSlider(Wave,DirX dirZ steep waveLen,0_1 0_1 0_1 0_10)]
-        _WaveDir("_WaveDir(xy:dir)(z: steep,w:waveLength)",vector) = (1,1,0.4,5)
+        [GroupEnum(Wave,SIMPLE _GERSTNER_WAVE_ON,true)]_ApplyGerstnerWaveOn("_ApplyGerstnerWaveOn",int) = 0
 
-        [GroupVectorSlider(Wave,DirXNoise dirZNoise steepNoise waveLenNoise,0_1 0_1 0_1 0_0.1)]
-        _WaveDirNoiseScale("_WaveDirNoiseScale",vector) = (0,0,0,0)
+        [GroupHeader(Wave,Wave( Direction Steep Length))]
+        [GroupVectorSlider(Wave,dirX dirZ steep(gerstner) waveLen(gerstner),0_1 0_1 0_1 0_10,,field)]
+        _WaveDir("_WaveDir(xy:dir)(z:steep,w:waveLength gerstner only)",vector) = (1,1,0.4,5)
+
+        [GroupVectorSlider(Wave,dirXNoise dirZNoise steepNoise waveLenNoise,0_1 0_1 0_1 0_0.1,gerstner use,field)]
+        _WaveDirNoiseScale("_WaveDirNoiseScale (gerstner only)",vector) = (0,0,0,0)
+
+        [GroupVectorSlider(Wave,dirXNoiseSpeed dirZNoiseSpeed steepNoiseSpeed waveLenNoiseSpeed,0_1 0_1 0_1 0_0.1,gerstner use,field)]
+        _WaveDirNoiseSpeed("_WaveDirNoiseSpeed (gerstner only)",vector) = (0,0,0,0)
+
+        [GroupItem(Wave,more big more quick)]_WaveScrollSpeed("_WaveScrollSpeed (gerstner only)",float) = 1
 
         [GroupHeader(Wave,Wave Tiling)]
-        [GroupVectorSlider(Wave,x z ,0_10 0_10)]_WaveTiling("_WaveTiling",vector) = (0.1,1,0,0)
-        [GroupItem(Wave)]_WaveScale("_WaveScale",range(0,1)) = 1
+        [GroupVectorSlider(Wave,x z ,0_10 0_10,scale world pos.xz ,field)]_WaveTiling("_WaveTiling",vector) = (0.1,1,0,0)
+        [GroupItem(Wave, wave noise scale)]_WaveScale("_WaveScale",float) = 1
         [GroupItem(Wave)]_WaveSpeed("_WaveSpeed",float) = 1
-        [GroupItem(Wave)]_WaveStrength("_WaveStrength",range(0,5)) = 1
+        [GroupItem(Wave,worldPos.y move strength)]_WaveStrength("_WaveStrength",float) = 1
 
-        [GroupHeader(Wave, Noise Size)]
+        [GroupHeader(Wave, Noise Range)]
         [GroupItem(Wave)]_WaveNoiseMin("_WaveNoiseMin",range(0,1)) = 0.1
         [GroupItem(Wave)]_WaveNoiseMax("_WaveNoiseMax",range(0,1)) = 1
 
-        [GroupHeader(Wave ,Crest Color)]
+        [GroupHeader(Wave ,Crest Color Range)]
         [GroupItem(Wave)]_WaveCrestMin("_WaveCrestMin",range(0,1)) = 0.3
         [GroupItem(Wave)]_WaveCrestMax("_WaveCrestMax",range(0,1)) = 1
 
-
+//------------ Depth 
         [Group(Depth)]
         [GroupItem(Depth)]_Depth("_Depth",float) = -1.3
         [GroupItem(Depth)][hdr]_DepthColor("_DepthColor",color) = (0.5,0.7,.8,1)
