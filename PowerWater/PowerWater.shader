@@ -60,7 +60,7 @@ Shader "URP/PowerWater"
 
         [Group(Env)]
         [GroupHeader(Env,Refraction)]
-        [GroupItem(Env)]_RefractionIntensity("_RefractionIntensity",range(0,1)) = 0.5
+        [GroupItem(Env,effect by normal)]_RefractionIntensity("_RefractionIntensity",float) = 0.5
 
         [GroupHeader(Env,Reflection)]
         [GroupItem(Env)][noscaleoffset]_ReflectionCubemap("_ReflectionCubemap",cube) = ""{}

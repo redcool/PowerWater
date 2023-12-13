@@ -94,11 +94,9 @@
         float3 n = Blend2Normals(worldPos,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
 
 //------ brdf info
+        _WorldSpaceCameraPos = _FixedViewOn ? _ViewPosition : _WorldSpaceCameraPos;
 
-        if(_FixedViewOn){
-            _WorldSpaceCameraPos = _ViewPosition;
-        }
-        float3 v = normalize(GetWorldSpaceViewDir(worldPos));
+        float3 v = normalize(_WorldSpaceCameraPos - worldPos);
 
         float nv = saturate(dot(n,v));
 // calc sea color
