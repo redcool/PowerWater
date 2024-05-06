@@ -4,8 +4,7 @@
     #include "../../PowerShaderLib/Lib/PowerUtils.hlsl"
     #include "../../PowerShaderLib/Lib/NodeLib.hlsl"
     #include "../../PowerShaderLib/URPLib/Lighting.hlsl"
-
-
+    #include "../../PowerShaderLib/Lib/FlowMapLib.hlsl"
 
     #include "PowerWaterInput.hlsl"
     #include "PowerWaterCore.hlsl"
@@ -60,7 +59,7 @@
 
         o.vertex = TransformWorldToHClip(worldPos);
 
-        o.uvNoise.xy = worldPos.xz * _MainTex_ST.xy + _MainTex_ST.zw;
+        o.uvNoise.xy = worldPos.xz * _MainTex_ST.xy + _MainTex_ST.zw * _Time.yy;
         o.uvNoise.z = simpleNoise;
 
 
@@ -84,6 +83,17 @@
         float clampNoise = clamp(simpleNoise,0.3,1);
 // return clampNoise;
 
+        #if defined(_FLOW_MAP_ON)
+        float4 flowDir = CalcFlowDir(_FlowMap,mainUV,_FlowMap_ST.xy,_FlowMap_ST.zw,_FlowInfo.xy,_FlowInfo.zw);
+        // float2 flowDir = (tex2D(_FlowMap,mainUV* _FlowMap_ST.xy+_FlowMap_ST.zw*_Time.yy).xy*2-1) * _FlowInfo.xy + _FlowInfo.zw*_Time.yy;
+        // float flowDirScale = smoothstep(0.3,0.6,flowDir.x);
+        // flowDir.xy *= flowDirScale;
+        #else
+        float2 flowDir = 0;
+        #endif //_FLOW_MAP_ON
+
+        mainUV += flowDir.xy * _FlowMapApplyMainTexOn;
+
         float2 screenUV =  i.vertex.xy /_ScaledScreenParams.xy;
 
         float3 worldPos = float3(i.tSpace0.w,i.tSpace1.w,i.tSpace2.w);
@@ -91,8 +101,8 @@
         float3 vertexBinormal = normalize(float3(i.tSpace0.y,i.tSpace1.y,i.tSpace2.y));
         float3 vertexNormal = normalize(float3(i.tSpace0.z,i.tSpace1.z,i.tSpace2.z));
 // blend 2 normals 
-        float3 n = Blend2Normals(worldPos,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
-
+        float2 worldUV = worldPos.xz + flowDir.xy;
+        float3 n = Blend2Normals(worldUV,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
 //------ brdf info
         _WorldSpaceCameraPos = _FixedViewOn ? _ViewPosition : _WorldSpaceCameraPos;
 

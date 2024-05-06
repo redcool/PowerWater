@@ -11,10 +11,10 @@
         return bedPos;
     }
 
-    float3 Blend2Normals(float3 worldPos,float3 tSpace0,float3 tSpace1,float3 tSpace2){
+    float3 Blend2Normals(float2 worldUV,float3 tSpace0,float3 tSpace1,float3 tSpace2){
         // calc normal uv then 2 normal blend
-        float2 normalUV1 = CalcOffsetTiling(worldPos.xz,float2(1,0.2),_NormalSpeed,_NormalTiling);
-        float2 normalUV2 = CalcOffsetTiling(worldPos.xz,float2(-1,-0.2),_NormalSpeed,_NormalTiling);
+        float2 normalUV1 = CalcOffsetTiling(worldUV,float2(1,0.2),_NormalSpeed,_NormalTiling);
+        float2 normalUV2 = CalcOffsetTiling(worldUV,float2(-1,-0.2),_NormalSpeed,_NormalTiling);
 
         float3 tn = UnpackNormalScale(tex2D(_NormalMap,normalUV1),_NormalScale);
         float3 tn2 = UnpackNormalScale(tex2D(_NormalMap,normalUV2),_NormalScale);

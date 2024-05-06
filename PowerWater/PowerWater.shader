@@ -2,7 +2,7 @@ Shader "URP/PowerWater"
 {
     Properties
     {
-        [GroupHeader(v(0.0.3))]
+        [GroupHeader(v(0.0.4))]
         [Group(Fresnel Color)]
         [GroupItem(Fresnel Color)][hdr]_Color1("_Color1",color) = (0,0.1,.99,1)
         [GroupItem(Fresnel Color)][hdr]_Color2("_Color2",color) = (0,0.34,.99,1)
@@ -21,6 +21,13 @@ Shader "URP/PowerWater"
         [GroupItem(Main)]_Metallic("_Metallic",range(0,1)) = 0.5
         [GroupItem(Main)]_Smoothness("_Smoothness",range(0,1)) = 0.9
         [GroupItem(Main)]_Occlusion("_Occlusion",range(0,1)) = 0
+
+//------------ FlowMap
+        [Group(FlowMap)]
+        [GroupToggle(FlowMap,_FLOW_MAP_ON)] _FlowMapOn("_FlowMapOn",float) = 0
+        [GroupItem(FlowMap)] _FlowMap("_FlowMap",2d) = ""{}
+        [GroupVectorSlider(FlowMap,FlowDirScale_X FlowDirScale_Y FlowDirOffset_X FlowDirOffset_Y,0_1 0_1 0_1 0_1,Flow dir info,field )] _FlowInfo("_FlowInfo",vector) = (1,1,1,1)
+        [GroupToggle(FlowMap)] _FlowMapApplyMainTexOn("_FlowMapApplyMainTexOn",float) = 1
 //------------ Wave 
         [Group(Wave)]
         [GroupHeader(Wave, Wave function)]
@@ -147,6 +154,7 @@ Shader "URP/PowerWater"
 
             // #pragma shader_feature_fragment ALPHA_TEST
             #pragma shader_feature_fragment _SEA_FULL SEA_SIMPLE SEA_FOAM
+            #pragma shader_feature_fragment _FLOW_MAP_ON
 
             // #define _REFLECTION_PROBE_BLENDING
             // #define _REFLECTION_PROBE_BOX_PROJECTION
