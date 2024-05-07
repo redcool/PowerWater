@@ -9,6 +9,7 @@ Shader "URP/PowerWater"
 
         [Group(Main)]
         [GroupItem(Main)]_MainTex ("Texture", 2D) = "white" {}
+        [GroupItem(Main)]_Color ("_Color", color) = (1,1,1,1)
 
         [GroupHeader(Main,Normal)]
         [GroupItem(Main)][NoScaleOffset]_NormalMap("_NormalMap",2d) = "bump"{}

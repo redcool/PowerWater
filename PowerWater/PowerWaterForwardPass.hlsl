@@ -132,7 +132,7 @@
         float metallic = _Metallic * pbrMask.x;
         float occlusion = lerp(1, pbrMask.z,_Occlusion);
 
-        float4 mainTex = tex2D(_MainTex, mainUV);
+        float4 mainTex = tex2D(_MainTex, mainUV) * _Color;
         float3 albedo = mainTex.xyz * seaColor;
         float alpha = mainTex.w;
         float3 diffColor = albedo * (1-metallic);
