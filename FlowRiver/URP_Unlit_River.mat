@@ -52,7 +52,7 @@ Material:
     - _CullMode: 2
     - _DstMode: 10
     - _FoamDepth: -0.4
-    - _FoamNoiseScale: 0.18
+    - _FoamNoiseScale: -1
     - _FoamScale: 2.31
     - _PresetBlendMode: 0
     - _SpecNoiseScale1: 0.013
@@ -62,8 +62,8 @@ Material:
     - _ZWriteMode: 0
     m_Colors:
     - _Color: {r: 0.32075465, g: 0.32075465, b: 0.32075465, a: 0.73333335}
-    - _FoamColor: {r: 0.7490197, g: 0.7490197, b: 0.7490197, a: 1}
-    - _FoamDepthRange: {r: 0, g: 1, b: 0, a: 1}
+    - _FoamColor: {r: 4.2870936, g: 4.2870936, b: 4.2870936, a: 1}
+    - _FoamDepthRange: {r: 0.087, g: 1, b: 0, a: 1}
     - _SpecColor1: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor2: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

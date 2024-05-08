@@ -1,4 +1,4 @@
-Shader "URP/Unlit/Nature/FlowRiver"
+Shader "URP/Nature/FlowRiver"
 {
     Properties
     {
@@ -138,20 +138,21 @@ Shader "URP/Unlit/Nature/FlowRiver"
                 float3 worldPos = ScreenToWorldPos(screenUV,rawDepth,UNITY_MATRIX_I_VP);
                 float foamRate = 1-saturate(curWorldPos.y - worldPos.y - _FoamDepth);
                 // ------ bottom fading
-                foamRate = smoothstep(_FoamDepthRange.x,_FoamDepthRange.y,foamRate);
+                float bottomFading = smoothstep(_FoamDepthRange.x,_FoamDepthRange.y,foamRate);
 // return foamRate;
                 // ------ top fading
                 float topFading = saturate(curWorldPos.y - worldPos.y);
                 topFading = smoothstep(_FoamDepthRange.z,_FoamDepthRange.w,topFading);
 // return topFading;
-                foamRate = lerp(topFading,foamRate,topFading);
+                float foamFading = min(bottomFading,topFading);
+                foamRate = lerp(foamFading,foamRate,foamFading);
 
                 float2 foamUV = i.uv * _FoamTex_ST.xy + _FoamTex_ST.zw * _Time.y + flowMap.x * _FoamNoiseScale;
                 float4 foamTex= tex2D(_FoamTex,foamUV) * _FoamColor;
                 col = lerp(col,foamTex,foamRate);
                 
                 // ------ alpha fading with topFading
-                col.a *= topFading;
+                // col.a *= topFading;
 
                 return col;
             }
@@ -159,7 +160,7 @@ Shader "URP/Unlit/Nature/FlowRiver"
     ENDHLSL
     SubShader
     {
-        Tags { "RenderType"="Transparent"}
+        Tags { "RenderType"="Transparent" "queue"="transparent"}
         LOD 100
 
         ZWrite[_ZWriteMode]

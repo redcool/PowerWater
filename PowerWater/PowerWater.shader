@@ -1,4 +1,4 @@
-Shader "URP/PowerWater"
+Shader "URP/Nature/PowerWater"
 {
     Properties
     {
