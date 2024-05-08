@@ -60,7 +60,7 @@ Shader "URP/PowerWater"
         [GroupItem(Wave)]_WaveCrestHeight("_WaveCrestHeight",float) = 1
         [GroupItem(Wave)]_WaveCrestMin("_WaveCrestMin",range(0,1)) = 0.3
         [GroupItem(Wave)]_WaveCrestMax("_WaveCrestMax",range(0,1)) = 1
-
+        // [GroupItem(Wave)]_WaveCrestColor("_WaveCrestColor",color) = (1,1,1,1)
 //------------ Depth 
         [Group(Depth)]
         [GroupItem(Depth)]_Depth("_Depth",float) = -1.3
