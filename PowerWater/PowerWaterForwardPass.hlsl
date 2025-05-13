@@ -35,7 +35,11 @@
         v2f o = (v2f)0;
 // simple noise
         float3 worldPos = TransformObjectToWorld(v.vertex.xyz);
-        float2 noiseUV = CalcOffsetTiling(worldPos.xz * _WaveTiling.xy,_WaveDir.xy,_WaveSpeed,1);
+
+        float2 dirModes[3] = {worldPos.xz,worldPos.xy,worldPos.yz};
+        float2 dirMode = dirModes[_DirMode];
+
+        float2 noiseUV = CalcOffsetTiling(dirMode * _WaveTiling.xy,_WaveDir.xy,_WaveSpeed,1);
         float simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale) ;
         // simpleNoise = simpleNoise * 2 - 1;
         simpleNoise = smoothstep(_WaveNoiseMin,_WaveNoiseMax,simpleNoise);
@@ -59,7 +63,7 @@
 
         o.vertex = TransformWorldToHClip(worldPos);
 
-        o.uvNoise.xy = worldPos.xz * _MainTex_ST.xy + _MainTex_ST.zw * _Time.yy;
+        o.uvNoise.xy = dirMode * _MainTex_ST.xy + _MainTex_ST.zw * _Time.yy;
         o.uvNoise.z = simpleNoise;
 
 
@@ -97,11 +101,15 @@
         float2 screenUV =  i.vertex.xy /_ScaledScreenParams.xy;
 
         float3 worldPos = float3(i.tSpace0.w,i.tSpace1.w,i.tSpace2.w);
+
+        float2 dirModes[3] = {worldPos.xz,worldPos.xy,worldPos.yz};
+        float2 dirMode = dirModes[_DirMode];
+
         float3 vertexTangent = (float3(i.tSpace0.x,i.tSpace1.x,i.tSpace2.x));
         float3 vertexBinormal = normalize(float3(i.tSpace0.y,i.tSpace1.y,i.tSpace2.y));
         float3 vertexNormal = normalize(float3(i.tSpace0.z,i.tSpace1.z,i.tSpace2.z));
 // blend 2 normals 
-        float2 worldUV = worldPos.xz + flowDir.xy;
+        float2 worldUV = dirMode + flowDir.xy;
         float3 n = Blend2Normals(worldUV,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
 //------ brdf info
         _WorldSpaceCameraPos = _FixedViewOn ? _ViewPosition : _WorldSpaceCameraPos;
@@ -123,7 +131,6 @@
 //-------- pbr
         
         float4 pbrMask = tex2D(_PBRMask,mainUV);
-
         float smoothness = _Smoothness * pbrMask.y;
         float roughness = 1 - smoothness;
         float a = max(roughness * roughness, HALF_MIN_SQRT);
@@ -140,7 +147,7 @@
         float3 giDiff = CalcGIDiff(n,diffColor);
         float3 giSpec = CalcGISpec(_ReflectionCubemap,sampler_ReflectionCubemap,_ReflectionCubemap_HDR,specColor,worldPos,n,v,_ReflectDirOffset,_ReflectionIntensity,nv,roughness,a2,smoothness,metallic);
 
-        float4 col = 0;
+        float4 col = float4(0,0,0,1);
         col.xyz = (giDiff + giSpec) * occlusion;
 
         Light mainLight = GetMainLight();
@@ -155,7 +162,7 @@
 //---------fog
         BlendFogSphere(col.xyz/**/,worldPos,i.fogCoord,true,false);
 //--------- blend (sea bed, col)
-        col.xyz = lerp(seaBedColor,col,1-seaSideDepth);
+        col.xyz = lerp(seaBedColor,col,(1-seaSideDepth));
         
         return half4(col.xyz,alpha);
     }

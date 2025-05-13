@@ -6,6 +6,8 @@ Shader "URP/Nature/PowerWater"
         [Group(Fresnel Color)]
         [GroupItem(Fresnel Color)][hdr]_Color1("_Color1",color) = (0,0.1,.99,1)
         [GroupItem(Fresnel Color)][hdr]_Color2("_Color2",color) = (0,0.34,.99,1)
+        [Group(Dir)]
+        [GroupEnum(Dir,xz 0 xy 1 yz 2)]_DirMode("_DirMode",float) = 0
 
         [Group(Main)]
         [GroupItem(Main)]_MainTex ("Texture", 2D) = "white" {}
@@ -110,10 +112,10 @@ Shader "URP/Nature/PowerWater"
         [GroupToggle(SunAndEye)]_FixedViewOn("_FixedViewOn",int) = 0
         [GroupItem(SunAndEye)]_ViewPosition("_ViewPosition",vector) = (10,-10,10)
 
+// ================================================== alpha      
         [Group(Alpha)]
         [GroupHeader(Alpha,BlendMode)]
         [GroupPresetBlendMode(Alpha,,_SrcMode,_DstMode)]_PresetBlendMode("_PresetBlendMode",int)=0
-        // [GroupEnum(Alpha,UnityEngine.Rendering.BlendMode)]
         [HideInInspector]_SrcMode("_SrcMode",int) = 1
         [HideInInspector]_DstMode("_DstMode",int) = 0
 
@@ -123,26 +125,51 @@ Shader "URP/Nature/PowerWater"
         // [GroupHeader(Alpha,AlphaTest)]
         // [GroupToggle(Alpha,ALPHA_TEST)]_AlphaTestOn("_AlphaTestOn",int) = 0
         // [GroupSlider(Alpha)]_Cutoff("_Cutoff",range(0,1)) = 0.5
-
+// ================================================== Settings
         [Group(Settings)]
         [GroupEnum(Settings,UnityEngine.Rendering.CullMode)]_CullMode("_CullMode",int) = 2
 		[GroupToggle(Settings)]_ZWriteMode("ZWriteMode",int) = 0
+
 		/*
 		Disabled,Never,Less,Equal,LessEqual,Greater,NotEqual,GreaterEqual,Always
 		*/
-		[GroupEnum(Settings,UnityEngine.Rendering.CompareFunction)]_ZTestMode("_ZTestMode",float) = 4  
+		[GroupEnum(Settings,UnityEngine.Rendering.CompareFunction)]_ZTestMode("_ZTestMode",float) = 4
+
+        [GroupHeader(Settings,Color Mask)]
+        [GroupEnum(Settings,RGBA 16 RGB 15 RG 12 GB 6 RB 10 R 8 G 4 B 2 A 1 None 0)] _ColorMask("_ColorMask",int) = 15
+// ================================================== stencil settings
+        [Group(Stencil)]
+        [GroupEnum(Stencil,UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Float) = 0
+        [GroupStencil(Stencil)] _Stencil ("Stencil ID", int) = 0
+        [GroupEnum(Stencil,UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Float) = 0
+        [GroupHeader(Stencil,)]
+        [GroupEnum(Stencil,UnityEngine.Rendering.StencilOp)] _StencilFailOp ("Stencil Fail Operation", Float) = 0
+        [GroupEnum(Stencil,UnityEngine.Rendering.StencilOp)] _StencilZFailOp ("Stencil zfail Operation", Float) = 0
+        [GroupItem(Stencil)] _StencilWriteMask ("Stencil Write Mask", Float) = 255
+        [GroupItem(Stencil)] _StencilReadMask ("Stencil Read Mask", Float) = 255
     }
     SubShader
     {
         Tags{"Queue"="Transparent"}
         Pass
         {
-			ZWrite[_ZWriteMode]
-			Blend [_SrcMode][_DstMode]
-			// BlendOp[_BlendOp]
-			Cull[_CullMode]
-			ztest[_ZTestMode]
-			// ColorMask [_ColorMask]
+            ZWrite[_ZWriteMode]
+            Blend [_SrcMode][_DstMode]
+            // BlendOp[_BlendOp]
+            Cull [_CullMode]
+            ztest [_ZTestMode]
+            ColorMask [_ColorMask]
+
+            Stencil
+            {
+                Ref [_Stencil]
+                Comp [_StencilComp]
+                Pass [_StencilOp]
+                Fail [_StencilFailOp]
+                ZFail [_StencilZFailOp]
+                ReadMask [_StencilReadMask]
+                WriteMask [_StencilWriteMask]
+            }
 
             HLSLPROGRAM
             #pragma vertex vert

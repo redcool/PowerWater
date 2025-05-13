@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 020239da890028742becb2d5aad81070, type: 3}
+  m_Name: URP DrawObjects Water
+  m_EditorClassIdentifier: 
+  enabled: 1
+  featureList:
+  - {fileID: 11400000, guid: 90bbb18e1917d4a4ca2194cd0232fe14, type: 2}
+  - {fileID: 11400000, guid: 9ec8ee4e7f3fbb640ace665386e70def, type: 2}
+  - {fileID: 11400000, guid: e7275610de5139147ba2f5d592b704ba, type: 2}
+  - {fileID: 11400000, guid: 857c90a25e2c00041b93296dbbae4135, type: 2}
+  isDetailsFoldout: 1
+  labelWidth: 250
