@@ -59,10 +59,10 @@ return seaColor;
 #endif
         // -------------------- caustics ,depth is 1
         float causticsDepth = CalcDepth(bedPos,worldPos,_CausticsDepth);
-        half3 causticsColor = CalcFoamColor(_CausticTex,uv,blendNormal*2,clampNoise ,_CausticsNoiseScale,_CausticTex_ST.xy,_Time.xx*_CausticTex_ST.zw);
-        half3 causticsColor2 = CalcFoamColor(_CausticTex,uv,blendNormal,clampNoise ,_CausticsNoiseScale*0.5,_CausticTex_ST.xy+blendNormal*0,_Time.xx*_CausticTex_ST.zw*0.1+blendNormal*0.1);
+        half3 causticsColor = CalcFoamColor(_CausticTex,uv,blendNormal*2,clampNoise ,_CausticsNoiseScale,_CausticTex_ST.xy,_Time.xx*_CausticTex_ST.zw+blendNormal*0.05);
+        half3 causticsColor2 = CalcFoamColor(_CausticTex,uv,blendNormal,clampNoise ,_CausticsNoiseScale*0.5,_CausticTex_ST.xy,_Time.xx*_CausticTex_ST.zw*0.1+blendNormal*0.1);
+// return causticsColor2;
         causticsColor *= causticsColor2;
-// return causticsColor;
         
         causticsColor *= _CausticsIntensity * _CausticsColor * causticsDepth;
 

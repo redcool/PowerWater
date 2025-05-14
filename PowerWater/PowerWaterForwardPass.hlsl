@@ -49,11 +49,18 @@
         float3 tangent = v.tangent.xyz;//normalize(float3(1,simpleNoise,0));
         float3 normal = v.normal; //float3(-tangent.y,tangent.x,0);
 
+        float3 t = normalize(TransformObjectToWorldDir(tangent.xyz));
+        float3 n = normalize(TransformObjectToWorldNormal(normal));
+        float3 b = normalize(cross(n,t)) * v.tangent.w;
+
         // apply wave
         worldPos.y += simpleNoise * _WaveStrength;
         // if(_ApplyGerstnerWaveOn)
         #if defined(_GERSTNER_WAVE_ON)
         {
+            float3 tn = Blend2NormalsLOD(_NormalMap,noiseUV,_NormalTiling,_NormalSpeed,_NormalScale,0);
+            float3 n = TangentToWorld(tn,t,b,n);
+
             half4 noiseScale = _WaveDirNoiseScale * (simpleNoise) + 0.00001;
             half4 noiseScaleSpeed = _WaveDirNoiseSpeed * (_Time.x*0.001);
             half4 waveDir = _WaveDir + noiseScale ;
@@ -68,9 +75,7 @@
         o.uvNoise.z = simpleNoise;
 
 
-        float3 t = normalize(TransformObjectToWorldDir(tangent.xyz));
-        float3 n = normalize(TransformObjectToWorldNormal(normal));
-        float3 b = normalize(cross(n,t)) * v.tangent.w;
+
 
         o.tSpace0 = float4(t.x,b.x,n.x,worldPos.x);
         o.tSpace1 = float4(t.y,b.y,n.y,worldPos.y);
