@@ -95,14 +95,15 @@ Shader "URP/Nature/PowerWater"
         [GroupVectorSlider(FoamAndCaustics,FoamDepth depthMin depthMax ,0_1 0_1 0_1 ,,field float float )]
         _FoamDepth("_FoamDepth(x:depth,yz:(Depth range))",vector) = (-0.13,0,0.15,0)
 
-        [GroupItem(FoamAndCaustics)]_FoamSpeed("_FoamSpeed",float) = 1
+        [GroupItem(FoamAndCaustics)]_FoamNoiseScale("_FoamNoiseScale",float) = 1
         [GroupItem(FoamAndCaustics)]_FoamColor("_FoamColor",color) = (1,1,1,1)
 
         // [Space(10)]
         [GroupHeader(FoamAndCaustics,Caustics)]
+        [GroupItem(FoamAndCaustics)]_CausticTex("_CausticTex",2d) = ""{}
         [GroupItem(FoamAndCaustics)]_CausticsIntensity("_CausticsIntensity",range(0,3)) = 1
-        [GroupItem(FoamAndCaustics)]_CausticsSpeed("_CausticsSpeed",float) = 1
-        [GroupItem(FoamAndCaustics)]_CausticsTiling("_CausticsTiling",float) = 1
+        [GroupItem(FoamAndCaustics)]_CausticsNoiseScale("_CausticsNoiseScale",float) = 1
+        // [GroupItem(FoamAndCaustics)]_CausticsTiling("_CausticsTiling",float) = 1
         [GroupItem(FoamAndCaustics)]_CausticsColor("_CausticsColor",color) = (.5,.5,.5,1)
 
         [GroupVectorSlider(FoamAndCaustics,Depth depthMin depthMax,0_1 0_1 0_1,,field float float)]

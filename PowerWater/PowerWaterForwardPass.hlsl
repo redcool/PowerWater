@@ -5,6 +5,7 @@
     #include "../../PowerShaderLib/Lib/NodeLib.hlsl"
     #include "../../PowerShaderLib/URPLib/Lighting.hlsl"
     #include "../../PowerShaderLib/Lib/FlowMapLib.hlsl"
+    #include "../../PowerShaderLib/Lib/MaterialLib.hlsl"
 
     #include "PowerWaterInput.hlsl"
     #include "PowerWaterCore.hlsl"
@@ -110,7 +111,8 @@
         float3 vertexNormal = normalize(float3(i.tSpace0.z,i.tSpace1.z,i.tSpace2.z));
 // blend 2 normals 
         float2 worldUV = dirMode + flowDir.xy;
-        float3 n = Blend2Normals(worldUV,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
+        float3 n = Blend2Normals(_NormalMap,worldUV,_NormalTiling,_NormalSpeed,_NormalScale,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
+        // float3 n = Blend2Normals(worldUV,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
 //------ brdf info
         _WorldSpaceCameraPos = _FixedViewOn ? _ViewPosition : _WorldSpaceCameraPos;
 

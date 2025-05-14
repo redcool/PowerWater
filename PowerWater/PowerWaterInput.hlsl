@@ -8,6 +8,7 @@ sampler2D _CameraOpaqueTexture;
 sampler2D _CameraDepthTexture;
 sampler2D _FoamTex;
 sampler2D _FlowMap;
+sampler2D _CausticTex;
 
 TEXTURECUBE(_ReflectionCubemap); SAMPLER(sampler_ReflectionCubemap);
 
@@ -39,11 +40,12 @@ half _WaveNoiseMin,_WaveNoiseMax;
 
 half4 _FoamTex_ST;
 half4 _FoamDepth;
-half _FoamSpeed;
+half _FoamNoiseScale;
 half4 _FoamColor;
 
 half _RefractionIntensity;
-half _CausticsIntensity,_CausticsTiling,_CausticsSpeed;
+half4 _CausticTex_ST;
+half _CausticsIntensity,_CausticsNoiseScale; //_CausticsTiling
 half4 _CausticsColor;
 half4 _CausticsDepth;
 

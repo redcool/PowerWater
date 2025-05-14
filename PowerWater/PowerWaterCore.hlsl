@@ -11,32 +11,16 @@
         return bedPos;
     }
 
-    float3 Blend2Normals(float2 worldUV,float3 tSpace0,float3 tSpace1,float3 tSpace2){
-        // calc normal uv then 2 normal blend
-        float2 normalUV1 = CalcOffsetTiling(worldUV,float2(1,0.2),_NormalSpeed,_NormalTiling);
-        float2 normalUV2 = CalcOffsetTiling(worldUV,float2(-1,-0.2),_NormalSpeed,_NormalTiling);
-
-        float3 tn = UnpackNormalScale(tex2D(_NormalMap,normalUV1),_NormalScale);
-        float3 tn2 = UnpackNormalScale(tex2D(_NormalMap,normalUV2),_NormalScale);
-        tn = BlendNormal(tn,tn2);
-
-        float3 n = normalize(float3(
-            dot(tSpace0.xyz,tn),
-            dot(tSpace1.xyz,tn),
-            dot(tSpace2.xyz,tn)
-        ));
-        return n;
-    }
-
     float CalcDepth(float3 bedPos,float3 worldPos,float3 depthRange/*(x:depth,yz:depth(min,max))*/){
         float depth = saturate(bedPos.y - worldPos.y - depthRange.x);
         return smoothstep(depthRange.y,depthRange.z,depth);
     }
-
-    float3 CalcFoamColor(float2 uv,float3 blendNormal,float clampNoise,float offsetSpeed,float2 uvTiling){
+//_FoamTex
+    float3 CalcFoamColor(sampler2D tex,float2 uv,float3 blendNormal,float clampNoise,float offsetScale,float2 uvTiling,float2 uvOffset=0){
         float2 foamOffset = blendNormal.xz*0.05 + float2(clampNoise*0.1,0);
-        foamOffset *= offsetSpeed;
-        float3 foamTex = tex2D(_FoamTex,uv * uvTiling + foamOffset).xyz;
+        foamOffset *= offsetScale;
+        uv = frac(uv * uvTiling + foamOffset + uvOffset);
+        float3 foamTex = tex2D(tex,uv).xyz;
         return foamTex;
     }
     
@@ -68,17 +52,19 @@ return seaColor;
         // -------------------- foam, depth is 0.5
         float foamDepth = CalcDepth(bedPos,worldPos,_FoamDepth);
 // return foamDepth;
-        float3 foamColor = CalcFoamColor(uv,blendNormal,clampNoise,_FoamSpeed,_FoamTex_ST.xy);
+        float3 foamColor = CalcFoamColor(_FoamTex,uv,blendNormal,clampNoise,_FoamNoiseScale,_FoamTex_ST.xy,_FoamTex_ST.zw);
         seaColor += foamColor.xyz * _FoamColor * foamDepth;
 #if SEA_FOAM
 return seaColor;
 #endif
         // -------------------- caustics ,depth is 1
         float causticsDepth = CalcDepth(bedPos,worldPos,_CausticsDepth);
-
-        float3 causticsColor = CalcFoamColor(uv,blendNormal*2,clampNoise,_CausticsSpeed,_CausticsTiling);
-        causticsColor *= _CausticsIntensity * _CausticsColor * causticsDepth;
+        half3 causticsColor = CalcFoamColor(_CausticTex,uv,blendNormal*2,clampNoise ,_CausticsNoiseScale,_CausticTex_ST.xy,_Time.xx*_CausticTex_ST.zw);
+        half3 causticsColor2 = CalcFoamColor(_CausticTex,uv,blendNormal,clampNoise ,_CausticsNoiseScale*0.5,_CausticTex_ST.xy+blendNormal*0,_Time.xx*_CausticTex_ST.zw*0.1+blendNormal*0.1);
+        causticsColor *= causticsColor2;
 // return causticsColor;
+        
+        causticsColor *= _CausticsIntensity * _CausticsColor * causticsDepth;
 
         // -------------------- refraction color
         float refractionIntensity = _RefractionIntensity * (1-seaSideDepth);
@@ -87,8 +73,6 @@ return seaColor;
 // return refractionColor ;
         seaColor += refractionColor;
 // return seaColor;
-
-
 
         return lerp(seaColor,seaBedColor,seaSideDepth);
     }

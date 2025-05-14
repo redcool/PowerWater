@@ -45,7 +45,7 @@ Material:
     - _AlphaTestOn: 0
     - _ApplyGerstnerWaveOn: 1
     - _CausticsIntensity: 0
-    - _CausticsSpeed: 0
+    - _CausticsNoiseScale: 0
     - _CausticsTiling: 1
     - _CullMode: 0
     - _Cutoff: 0.5
@@ -54,7 +54,7 @@ Material:
     - _FixedViewOn: 0
     - _FoamDepthMax: 1
     - _FoamDepthMin: 0.11
-    - _FoamSpeed: 1
+    - _FoamNoiseScale: 1
     - _FogOn: 1
     - _Metallic: 0.557
     - _NormalScale: 1.42

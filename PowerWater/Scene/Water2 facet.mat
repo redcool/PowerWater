@@ -7,22 +7,22 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Water2
+  m_Name: Water2 facet
   m_Shader: {fileID: 4800000, guid: ef803b0fbfdc57042a39330f12bd9b3f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _GERSTNER_WAVE_ON
   - _SEA_FULL
   m_InvalidKeywords:
   - 0
   - None
   - SEA_DEPTH
+  - SIMPLE
   - _
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3001
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -30,9 +30,9 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _CausticTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: ceb30245a76f5bf48b636429fd079422, type: 3}
+        m_Scale: {x: 0.2, y: 0.2}
+        m_Offset: {x: 1, y: 0}
     - _FlowMap:
         m_Texture: {fileID: 2800000, guid: 270dc1a7153aecb41b9e5ddac9bb7755, type: 3}
         m_Scale: {x: 0.1, y: 0.1}
@@ -61,15 +61,17 @@ Material:
     m_Floats:
     - _AlphaPremultiply: 0
     - _AlphaTestOn: 0
-    - _ApplyGerstnerWaveOn: 1
-    - _CausticsIntensity: 1.14
-    - _CausticsNoiseScale: 3.65
+    - _ApplyGerstnerWaveOn: 0
+    - _CausticsIntensity: 3
+    - _CausticsNoiseScale: 0
     - _CausticsTiling: 3.53
-    - _ColorMask: 15
-    - _CullMode: 2
+    - _ClipOn: 0
+    - _ColorMask: 16
+    - _CullMode: 0
     - _Cutoff: 0.5
     - _Depth: -1.68
-    - _DirMode: 0
+    - _DepthFogOn: 1
+    - _DirMode: 1
     - _DstMode: 10
     - _FixedViewOn: 0
     - _FlowMapApplyMainTexOn: 0
@@ -80,28 +82,32 @@ Material:
     - _FoamDepthMin: 0
     - _FoamMode: 0
     - _FoamNoiseScale: 4.37
+    - _FogNoiseOn: 0
     - _FogOn: 0
+    - _HeightFogOn: 1
     - _Metallic: 0
-    - _NormalScale: 0.49
-    - _NormalSpeed: 0.56
-    - _NormalTiling: 0.1
+    - _NormalScale: 0.43
+    - _NormalSpeed: 0.38
+    - _NormalTiling: 0.01
+    - _NormalUnifiedOn: 0
     - _Occlusion: 0
     - _PresetBlendMode: 0
     - _ReflectionIntensity: 1
     - _RefractionIntensity: 0.5
-    - _SeaSideDepth: -0.0249
+    - _SeaSideDepth: -0.21
+    - _SimpleFog: 0
     - _Smoothness: 0.792
     - _SrcMode: 5
     - _Stencil: 123
-    - _StencilComp: 0
+    - _StencilComp: 6
     - _StencilFailOp: 0
-    - _StencilOp: 2
+    - _StencilOp: 3
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _StencilZFailOp: 0
-    - _WaveCrestHeight: 2.33
+    - _WaveCrestHeight: 0.66
     - _WaveCrestMax: 1
-    - _WaveCrestMin: 0
+    - _WaveCrestMin: 0.24
     - _WaveNoiseMax: 1
     - _WaveNoiseMin: 0.068
     - _WaveScale: 0.01
@@ -113,21 +119,21 @@ Material:
     - _ZWrite: 1
     - _ZWriteMode: 0
     m_Colors:
-    - _CausticsColor: {r: 0.8396226, g: 0.2883232, b: 0.2883232, a: 1}
-    - _CausticsDepth: {r: -1.29, g: 0, b: 1, a: 0}
-    - _Color: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
+    - _CausticsColor: {r: 1, g: 1, b: 1, a: 1}
+    - _CausticsDepth: {r: -1.96, g: 0, b: 1, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 0.94509804}
     - _Color1: {r: 0, g: 0.89433956, b: 0.241635, a: 1}
     - _Color2: {r: 0, g: 0.34, b: 0.99, a: 1}
     - _DepthColor: {r: 0.5, g: 0.7, b: 0.8, a: 1}
     - _FlowInfo: {r: 0.1, g: 0.1, b: 0.1, a: 0.1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
-    - _FoamDepth: {r: -0.63, g: 0.032, b: 0.388, a: 0}
+    - _FoamDepth: {r: 0.32, g: 0.032, b: 0.388, a: 0}
     - _ReflectDirOffset: {r: 0, g: 0, b: 0, a: 0}
     - _ShallowColor: {r: 1, g: 0, b: 0, a: 1}
     - _ViewPosition: {r: 10, g: -10, b: 10, a: 1}
     - _WaveCrestColor: {r: 1, g: 1, b: 1, a: 1}
-    - _WaveDir: {r: 1, g: 1, b: 0.396, a: 10}
-    - _WaveDirNoiseScale: {r: 1.05, g: 1, b: 0.22, a: 0.0002937}
+    - _WaveDir: {r: 1, g: 1, b: -0.44, a: 10}
+    - _WaveDirNoiseScale: {r: 6.5, g: 1, b: -0.2, a: -0.36}
     - _WaveTiling: {r: 10, g: 10, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &5400393268329627095
