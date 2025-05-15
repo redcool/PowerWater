@@ -31,7 +31,7 @@ Material:
     m_TexEnvs:
     - _CausticTex:
         m_Texture: {fileID: 2800000, guid: ceb30245a76f5bf48b636429fd079422, type: 3}
-        m_Scale: {x: 0.5, y: 0.5}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 1, y: 0}
     - _FlowMap:
         m_Texture: {fileID: 2800000, guid: 270dc1a7153aecb41b9e5ddac9bb7755, type: 3}
@@ -44,6 +44,10 @@ Material:
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 0.1, y: 0.1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 2800000, guid: 6266b78fb019d4741a6c5fff34abbf77, type: 3}
@@ -62,14 +66,14 @@ Material:
     - _AlphaPremultiply: 0
     - _AlphaTestOn: 0
     - _ApplyGerstnerWaveOn: 0
-    - _CausticsIntensity: 1.64
-    - _CausticsNoiseScale: 0
+    - _CausticsIntensity: 1.06
+    - _CausticsNoiseScale: 1.03
     - _CausticsTiling: 3.53
     - _ClipOn: 0
     - _ColorMask: 16
     - _CullMode: 0
     - _Cutoff: 0.5
-    - _Depth: -1.68
+    - _Depth: -3.67
     - _DepthFogOn: 1
     - _DirMode: 1
     - _DstMode: 10
@@ -94,7 +98,7 @@ Material:
     - _PresetBlendMode: 0
     - _ReflectionIntensity: 1
     - _RefractionIntensity: 0.5
-    - _SeaSideDepth: -0.21
+    - _SeaSideDepth: -0.054
     - _SimpleFog: 0
     - _Smoothness: 0.792
     - _SrcMode: 5
@@ -109,7 +113,7 @@ Material:
     - _WaveCrestMax: 1
     - _WaveCrestMin: 0.24
     - _WaveNoiseMax: 1
-    - _WaveNoiseMin: 0.068
+    - _WaveNoiseMin: 0
     - _WaveScale: 0.01
     - _WaveScrollSpeed: 1
     - _WaveSpeed: 1
@@ -120,20 +124,21 @@ Material:
     - _ZWriteMode: 0
     m_Colors:
     - _CausticsColor: {r: 1, g: 1, b: 1, a: 1}
-    - _CausticsDepth: {r: -2.32, g: 0, b: 1, a: 0}
+    - _CausticsDepth: {r: -5.09, g: 0, b: 0.884, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 0.94509804}
     - _Color1: {r: 0, g: 0.89433956, b: 0.241635, a: 1}
     - _Color2: {r: 0, g: 0.34, b: 0.99, a: 1}
     - _DepthColor: {r: 0.5, g: 0.7, b: 0.8, a: 1}
     - _FlowInfo: {r: 0.1, g: 0.1, b: 0.1, a: 0.1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
-    - _FoamDepth: {r: 0.32, g: 0.032, b: 0.388, a: 0}
+    - _FoamDepth: {r: -3.36, g: 0.032, b: 0.388, a: 0}
+    - _NoiseTexWeights: {r: 0.3, g: 0.3, b: 0.3, a: 0.1}
     - _ReflectDirOffset: {r: 0, g: 0, b: 0, a: 0}
     - _ShallowColor: {r: 1, g: 0, b: 0, a: 1}
     - _ViewPosition: {r: 10, g: -10, b: 10, a: 1}
     - _WaveCrestColor: {r: 1, g: 1, b: 1, a: 1}
-    - _WaveDir: {r: 1, g: 1, b: -0.44, a: 10}
-    - _WaveDirNoiseScale: {r: 6.5, g: 1, b: -0.2, a: -0.36}
+    - _WaveDir: {r: 1, g: 1, b: 1, a: 10}
+    - _WaveDirNoiseScale: {r: 6.5, g: 1, b: 0, a: 0}
     - _WaveTiling: {r: 10, g: 10, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &5400393268329627095

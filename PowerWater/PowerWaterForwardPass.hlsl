@@ -36,16 +36,6 @@
         v2f o = (v2f)0;
 // simple noise
         float3 worldPos = TransformObjectToWorld(v.vertex.xyz);
-
-        float2 dirModes[3] = {worldPos.xz,worldPos.xy,worldPos.yz};
-        float2 dirMode = dirModes[_DirMode];
-
-        float2 noiseUV = CalcOffsetTiling(dirMode * _WaveTiling.xy,_WaveDir.xy,_WaveSpeed,1);
-        float simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale) ;
-        // simpleNoise = simpleNoise * 2 - 1;
-        simpleNoise = smoothstep(_WaveNoiseMin,_WaveNoiseMax,simpleNoise);
-
-
         float3 tangent = v.tangent.xyz;//normalize(float3(1,simpleNoise,0));
         float3 normal = v.normal; //float3(-tangent.y,tangent.x,0);
 
@@ -53,29 +43,29 @@
         float3 n = normalize(TransformObjectToWorldNormal(normal));
         float3 b = normalize(cross(n,t)) * v.tangent.w;
 
+        float2 dirModes[3] = {worldPos.xz,worldPos.xy,worldPos.yz};
+        float2 worldPosDirMode = dirModes[_DirMode];
+
+        float2 noiseUV = worldPosDirMode * _WaveTiling.xy + _WaveDir.xy * _WaveSpeed * _Time.x;
+        float simpleNoise = Unity_SimpleNoise_half(noiseUV,_WaveScale);
+        // float simpleNoise = Unity_GradientNoise(noiseUV,.1);
+        simpleNoise = smoothstep(_WaveNoiseMin,_WaveNoiseMax,simpleNoise);
+
         // apply wave
-        worldPos.y += simpleNoise * _WaveStrength;
+        worldPos.y += simpleNoise.x * _WaveStrength;
         // if(_ApplyGerstnerWaveOn)
         #if defined(_GERSTNER_WAVE_ON)
         {
-            float3 tn = Blend2NormalsLOD(_NormalMap,noiseUV,_NormalTiling,_NormalSpeed,_NormalScale,0);
-            float3 n = TangentToWorld(tn,t,b,n);
-
-            half4 noiseScale = _WaveDirNoiseScale * (simpleNoise) + 0.00001;
-            half4 noiseScaleSpeed = _WaveDirNoiseSpeed * (_Time.x*0.001);
-            half4 waveDir = _WaveDir + noiseScale ;
+            float4 noiseScale = _WaveDirNoiseScale * (simpleNoise) + 0.00001;
+            float4 waveDir = _WaveDir + noiseScale ;
             worldPos += GerstnerWave(tangent/**/,normal/**/,waveDir,worldPos,_WaveScrollSpeed);
-            // simpleNoise = worldPos.y;
         }
         #endif
 
         o.vertex = TransformWorldToHClip(worldPos);
 
-        o.uvNoise.xy = dirMode * _MainTex_ST.xy + _MainTex_ST.zw * _Time.yy;
+        o.uvNoise.xy = worldPosDirMode * _MainTex_ST.xy + _MainTex_ST.zw * _Time.yy;
         o.uvNoise.z = simpleNoise;
-
-
-
 
         o.tSpace0 = float4(t.x,b.x,n.x,worldPos.x);
         o.tSpace1 = float4(t.y,b.y,n.y,worldPos.y);
@@ -86,7 +76,7 @@
     }
 
 
-    float4 frag (v2f i) : SV_Target
+    float4 frag (v2f i,half faceId:VFACE) : SV_Target
     {
         float2 mainUV = i.uvNoise.xy;
         float simpleNoise = i.uvNoise.z;
@@ -109,21 +99,23 @@
         float3 worldPos = float3(i.tSpace0.w,i.tSpace1.w,i.tSpace2.w);
 
         float2 dirModes[3] = {worldPos.xz,worldPos.xy,worldPos.yz};
-        float2 dirMode = dirModes[_DirMode];
+        float2 worldPosDirMode = dirModes[_DirMode];
 
         float3 vertexTangent = (float3(i.tSpace0.x,i.tSpace1.x,i.tSpace2.x));
         float3 vertexBinormal = normalize(float3(i.tSpace0.y,i.tSpace1.y,i.tSpace2.y));
         float3 vertexNormal = normalize(float3(i.tSpace0.z,i.tSpace1.z,i.tSpace2.z));
+        vertexNormal *= faceId;
 // blend 2 normals 
-        float2 worldUV = dirMode + flowDir.xy;
+        float2 worldUV = worldPosDirMode + flowDir.xy;
         float3 n = Blend2Normals(_NormalMap,worldUV,_NormalTiling,_NormalSpeed,_NormalScale,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
-        // float3 n = Blend2Normals(worldUV,i.tSpace0.xyz,i.tSpace1.xyz,i.tSpace2.xyz);
+        
 //------ brdf info
         _WorldSpaceCameraPos = _FixedViewOn ? _ViewPosition : _WorldSpaceCameraPos;
 
         float3 v = normalize(_WorldSpaceCameraPos - worldPos);
-
+        v.y *= faceId;
         float nv = saturate(dot(n,v));
+
 // calc sea color
         half crestHeight = worldPos.y - _WaveCrestHeight;
         float waveCrestColor = smoothstep(_WaveCrestMin,_WaveCrestMax,crestHeight);
@@ -131,10 +123,9 @@
         // float4 seaColorDepth = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV);
         float seaSideDepth;
         float3 seaBedColor;
-        float3 seaColor = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV,seaSideDepth/**/,seaBedColor/**/);
+        float3 seaColor = CalcSeaColor(screenUV,worldPos,vertexNormal,v,clampNoise,n,mainUV,seaSideDepth/**/,seaBedColor/**/,faceId);
         seaColor += waveCrestColor;// * _WaveCrestColor;
-
-        float3 emissionColor = 0;
+// return float4(seaColor,1);
 //-------- pbr
         
         float4 pbrMask = tex2D(_PBRMask,mainUV);
@@ -148,7 +139,9 @@
 
         float4 mainTex = tex2D(_MainTex, mainUV) * _Color;
         float3 albedo = mainTex.xyz * seaColor;
+        // alpha
         float alpha = mainTex.w;
+        // alpha *= faceId>0? 1 : seaColor.x+0.1;
         float3 diffColor = albedo * (1-metallic);
         float3 specColor = lerp(0.04,albedo,metallic);
         float3 giDiff = CalcGIDiff(n,diffColor);
@@ -165,12 +158,15 @@
         #endif
 
 //---------emission
-        col.xyz += emissionColor;
+        float3 emissionColor = 0;
+        col.xyz += emissionColor + 0;
 //---------fog
         BlendFogSphere(col.xyz/**/,worldPos,i.fogCoord,true,false);
 //--------- blend (sea bed, col)
+        // seaBedColor += faceId>0? 0 : seaColor;
+        // col.xyz *= seaBedColor;
         col.xyz = lerp(seaBedColor,col,(1-seaSideDepth));
-        
+
         return half4(col.xyz,alpha);
     }
 #endif //POWER_WATER_FORWARD_PASS_HLSL
