@@ -11,9 +11,13 @@
     float CalcDepth(float3 bedPos,float3 worldPos,float3 depthRange/*(x:depth,yz:depth(min,max))*/){
         // xz plane: 1 component, xy : 2 , yz:0
         half compId = (_DirMode+1)%3;
-        float bedPosArr[3] = {bedPos.x,bedPos.y,worldPos.z};
-        float worldPosArr[3] = {worldPos.x,worldPos.y,bedPos.z};
-        float depth = saturate(bedPosArr[compId] - worldPosArr[compId] - depthRange.x);
+        float3 vec = bedPos - worldPos;
+        vec.z *= -1;
+        float depth = saturate(vec[compId] -depthRange.x);
+        
+        // float bedPosArr[3] = {bedPos.x,bedPos.y,worldPos.z};
+        // float worldPosArr[3] = {worldPos.x,worldPos.y,bedPos.z};
+        // float depth = saturate(bedPosArr[compId] - worldPosArr[compId] - depthRange.x);
 
         // depth = saturate(bedPos.z - worldPos.z -depthRange.x);
         depth = smoothstep(depthRange.y,depthRange.z,depth);
