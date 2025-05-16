@@ -4,8 +4,8 @@ Shader "URP/Nature/PowerWater"
     {
         [GroupHeader(v(0.0.4))]
         [Group(Fresnel Color)]
-        [GroupItem(Fresnel Color)][gamma][hdr]_Color1("_Color1",color) = (0,0.1,.99,1)
-        [GroupItem(Fresnel Color)][gamma][hdr]_Color2("_Color2",color) = (0,0.34,.99,1)
+        [GroupItem(Fresnel Color)][hdr]_Color1("_Color1",color) = (0,0.1,.99,1)
+        [GroupItem(Fresnel Color)][hdr]_Color2("_Color2",color) = (0,0.34,.99,1)
         [Group(Dir)]
         [GroupEnum(Dir,xz 0 xy 1 yz 2,,plane)]_DirMode("_DirMode",float) = 0
         [GroupToggle(Dir,,plane reversed)]_DirModeReverse("_DirModeReverse",float) = 0
