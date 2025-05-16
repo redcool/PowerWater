@@ -64,7 +64,7 @@ half4 _FlowInfo;
 half _FlowMapApplyMainTexOn;
 
 half4 _Color;
-half _DirMode;
+half _DirMode, _DirModeReverse;
 CBUFFER_END            
 
 #endif //POWER_WATER_INPUT_HLSL
