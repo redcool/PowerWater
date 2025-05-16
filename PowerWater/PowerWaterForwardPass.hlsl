@@ -5,13 +5,14 @@
     #include "../../PowerShaderLib/Lib/NodeLib.hlsl"
     #include "../../PowerShaderLib/URPLib/Lighting.hlsl"
     #include "../../PowerShaderLib/Lib/FlowMapLib.hlsl"
-    #include "../../PowerShaderLib/Lib/MaterialLib.hlsl"
-
     #include "PowerWaterInput.hlsl"
     #include "PowerWaterCore.hlsl"
     #include "../../PowerShaderLib/Lib/WaveLib.hlsl"
     #include "../../PowerShaderLib/Lib/FogLib.hlsl"
 
+    #define USE_SAMPLER2D
+    #include "../../PowerShaderLib/Lib/TextureLib.hlsl"
+    #include "../../PowerShaderLib/Lib/MaterialLib.hlsl"
     struct appdata
     {
         float4 vertex : POSITION;

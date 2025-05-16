@@ -12,7 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _SEA_FULL
+  - SEA_FOAM
   m_InvalidKeywords:
   - 0
   - None
@@ -76,6 +76,7 @@ Material:
     - _Depth: -3.67
     - _DepthFogOn: 1
     - _DirMode: 1
+    - _DirModeReverse: 0
     - _DstMode: 10
     - _FixedViewOn: 0
     - _FlowMapApplyMainTexOn: 0
@@ -84,7 +85,7 @@ Material:
     - _FlowSpeed: 0.02
     - _FoamDepthMax: 1
     - _FoamDepthMin: 0
-    - _FoamMode: 0
+    - _FoamMode: 2
     - _FoamNoiseScale: 4.37
     - _FogNoiseOn: 0
     - _FogOn: 0
@@ -121,7 +122,7 @@ Material:
     - _ZTest: 4
     - _ZTestMode: 4
     - _ZWrite: 1
-    - _ZWriteMode: 0
+    - _ZWriteMode: 1
     m_Colors:
     - _CausticsColor: {r: 1, g: 1, b: 1, a: 1}
     - _CausticsDepth: {r: -5.09, g: 0, b: 0.884, a: 0}
